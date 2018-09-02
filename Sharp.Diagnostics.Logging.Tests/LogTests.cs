@@ -495,7 +495,7 @@ namespace Sharp.Diagnostics.Logging
         public void Operation()
         {
             ExpectTraceOperation("foo");
-            using (var operation = Trace.Operation("foo"))
+            using (var operation = Log.Operation("foo"))
                 operation.Should().BeOfType<TraceOperation>();
         }
 
@@ -504,7 +504,7 @@ namespace Sharp.Diagnostics.Logging
         {
             ExpectTraceOperation("foo");
             var count = 0;
-            Trace.Do("foo", () => { count++; });
+            Log.Do("foo", () => { count++; });
             count.Should().Be(1);
         }
 
@@ -512,7 +512,7 @@ namespace Sharp.Diagnostics.Logging
         public void Do_Func()
         {
             ExpectTraceOperation("foo");
-            var result = Trace.Do("foo", () => 42);
+            var result = Log.Do("foo", () => 42);
             result.Should().Be(42);
         }
 
