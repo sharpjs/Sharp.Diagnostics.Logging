@@ -1055,24 +1055,34 @@ namespace Sharp.Diagnostics.Logging
             if (exceptionObject == null)
                 return;
 
-            var type      = exceptionObject.GetType().FullName;
-            var exception = exceptionObject as Exception;
-
-            if (e.IsTerminating)
+            try
             {
-                Critical("Terminating due to an unhandled exception of type {0}.", type);
+                var type      = exceptionObject.GetType().FullName;
+                var exception = exceptionObject as Exception;
 
-                if (exception != null)
-                    Critical(exception);
+                if (e.IsTerminating)
+                {
+                    Critical("Terminating due to an unhandled exception of type {0}.", type);
 
-                Close();
+                    if (exception != null)
+                        Critical(exception);
+
+                    Close();
+                }
+                else
+                {
+                    Error("Unhandled exception of type {0}.  Execution will continue.", type);
+
+                    if (exception != null)
+                        Error(exception);
+                }
             }
-            else
+            catch
             {
-                Error("Unhandled exception of type {0}.  Execution will continue.", type);
-
-                if (exception != null)
-                    Error(exception);
+                // Logging here is best-effort only.  If the logging API throws
+                // an exception here, there is no choice but to ignore it.  The
+                // runtime unhandled-exception behavior must continue, and the
+                // original exception must not be obscured by a secondary one.
             }
         }
 
