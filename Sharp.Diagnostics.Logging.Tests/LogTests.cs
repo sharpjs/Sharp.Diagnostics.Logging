@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -740,6 +741,28 @@ namespace Sharp.Diagnostics.Logging
         private void CauseFirstChanceException(string message)
         {
             try { throw new ApplicationException(message); } catch { }
+        }
+
+        [Test]
+        public void LogAllThrownExceptions_NullEventArgs()
+        {
+            // This should not ever happen, but test for it anyway.
+            Log.SimulateFirstChanceException(null);
+        }
+
+        [Test]
+        public void LogAllThrownExceptions_NullException()
+        {
+            // This should not ever happen, but test for it anyway.
+            Log.SimulateFirstChanceException(new FirstChanceExceptionEventArgs(null));
+        }
+
+        [Test]
+        public void LogAllThrownExceptions_SecondaryException()
+        {
+            // Listener will throw due to its Trace* methods not being set up
+            var e = new ApplicationException("test");
+            Log.SimulateFirstChanceException(new FirstChanceExceptionEventArgs(e));
         }
 
         #endregion

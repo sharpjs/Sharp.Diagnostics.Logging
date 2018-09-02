@@ -1094,6 +1094,11 @@ namespace Sharp.Diagnostics.Logging
             Close();
         }
 
+        internal static void SimulateFirstChanceException(FirstChanceExceptionEventArgs e)
+        {
+            AppDomain_FirstChanceException(AppDomain.CurrentDomain, e);
+        }
+
         #endregion
     }
 }
