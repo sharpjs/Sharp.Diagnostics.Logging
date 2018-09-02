@@ -487,7 +487,7 @@ namespace Sharp.Diagnostics.Logging
         {
             ExpectTraceOperation("foo");
             var count = 0;
-            Trace.Do("foo", () => count++);
+            Trace.Do("foo", () => { count++; });
             count.Should().Be(1);
         }
 
