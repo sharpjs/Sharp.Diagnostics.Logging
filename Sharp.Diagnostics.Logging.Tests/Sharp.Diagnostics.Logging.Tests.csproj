@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\General.props" />
+  <Import Project="..\Local.props" Condition="Exists('..\Local.props')" />
+
+  <PropertyGroup>
+    <Description>Tests for Sharp.Diagnostics.Logging</Description>
+    <!-- Portable 'netstandardX.Y' target frameworks are not supported for tests. -->
+    <TargetFrameworks>net472;netcoreapp2.1</TargetFrameworks>
+    <RootNamespace>Sharp.Diagnostics.Logging</RootNamespace>
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.4.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="Moq" Version="4.9.0" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="JetBrains.dotCover.CommandLineTools" Version="2018.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sharp.Diagnostics.Logging\Sharp.Diagnostics.Logging.csproj" />
+  </ItemGroup>
+
+</Project>
