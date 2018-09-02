@@ -772,6 +772,69 @@ namespace Sharp.Diagnostics.Logging
         }
 
         [Test]
+        public void CloseOnExit_UnhandledException_Terminating()
+        {
+            var exception = new ApplicationException();
+
+            ExpectTraceEvent(
+                Critical, 0,
+                "Terminating due to an unhandled exception of type {0}.",
+                typeof(ApplicationException).FullName
+            );
+
+            ExpectTraceData(Critical, 0, exception);
+
+            Listener.Setup(t => t.Close()).Verifiable();
+
+            try
+            {
+                Log.CloseOnExit = true;
+                Log.CloseOnExit.Should().BeTrue();
+                Log.CloseOnExit = true;
+                Log.CloseOnExit.Should().BeTrue();
+
+                var args = new UnhandledExceptionEventArgs(exception, isTerminating: true);
+                Log.SimulateUnhandledException(args);
+            }
+            finally
+            {
+                Log.CloseOnExit = false;
+                Log.CloseOnExit.Should().BeFalse();
+                Log.CloseOnExit = false;
+                Log.CloseOnExit.Should().BeFalse();
+            }
+        }
+
+        [Test]
+        public void CloseOnExit_UnhandledException_Nonterminating()
+        {
+            // Documentation seems to indicate that this case could only have
+            // occured in .NET Framework 1.0 and 1.1.  Test for it anyway.
+
+            var exception = new ApplicationException();
+
+            ExpectTraceEvent(
+                Error, 0,
+                "Unhandled exception of type {0}.  Execution will continue.",
+                typeof(ApplicationException).FullName
+            );
+
+            ExpectTraceData(Error, 0, exception);
+
+            try
+            {
+                Log.CloseOnExit = true;
+
+                var args = new UnhandledExceptionEventArgs(exception, isTerminating: false);
+                Log.SimulateUnhandledException(args);
+            }
+            finally
+            {
+                Log.CloseOnExit = false;
+            }
+        }
+
+        [Test]
         public void CloseOnExit_UnhandledException_NullEventArgs()
         {
             // This should not ever happen, but test for it anyway.
@@ -782,7 +845,7 @@ namespace Sharp.Diagnostics.Logging
         public void CloseOnExit_UnhandledException_NullException()
         {
             // This should not ever happen, but test for it anyway.
-            var args = new UnhandledExceptionEventArgs(null, false);
+            var args = new UnhandledExceptionEventArgs(null, isTerminating: true);
             Log.SimulateUnhandledException(args);
         }
 
@@ -790,9 +853,53 @@ namespace Sharp.Diagnostics.Logging
         public void CloseOnExit_UnhandledException_SecondaryException()
         {
             // Listener will throw due to its Trace* methods not being set up
-            var e = new ApplicationException("test");
-            var args = new UnhandledExceptionEventArgs(e, false);
+            var exception = new ApplicationException("test");
+            var args = new UnhandledExceptionEventArgs(exception, isTerminating: true);
             Log.SimulateUnhandledException(args);
+        }
+
+        [Test]
+        public void CloseOnExit_DomainUnload()
+        {
+            ExpectTraceEvent(
+                Information, 0,
+                "The AppDomain is unloading.",
+                null
+            );
+
+            Listener.Setup(t => t.Close()).Verifiable();
+
+            try
+            {
+                Log.CloseOnExit = true;
+                Log.SimulateDomainUnload();
+            }
+            finally
+            {
+                Log.CloseOnExit = false;
+            }
+        }
+
+        [Test]
+        public void CloseOnExit_ProcessExit()
+        {
+            ExpectTraceEvent(
+                Information, 0,
+                "The AppDomain's parent process is exiting.",
+                null
+            );
+
+            Listener.Setup(t => t.Close()).Verifiable();
+
+            try
+            {
+                Log.CloseOnExit = true;
+                Log.SimulateProcessExit();
+            }
+            finally
+            {
+                Log.CloseOnExit = false;
+            }
         }
 
         #endregion
