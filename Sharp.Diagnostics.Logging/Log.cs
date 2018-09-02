@@ -783,6 +783,25 @@ namespace Sharp.Diagnostics.Logging
         /// <summary>
         ///   Writes an entry to the log, reporting a new identifier for the current logical activity.
         /// </summary>
+        /// <param name="message">A message for the entry.</param>
+        /// <param name="newActivityId">A new identifier for the current logical activity.</param>
+        /// <remarks>
+        ///   <c>Transfer</c> is intended to be used with the logical activities of a
+        ///   <c>CorrelationManager</c>. The <paramref name="newActivityId"/> parameter
+        ///   relates to the <c>ActivityId</c> property of a <c>CorrelationManager</c> object.
+        ///   If a logical operation begins in one activity and transfers to another,
+        ///   the second activity should log the transfer by calling the <c>Transfer</c> method.
+        ///   The <c>Transfer</c> call relates the new activity identifier to the previous one.
+        ///   The most likely consumer of this functionality is a trace viewer that can report
+        ///   logical operations that span multiple activities.
+        /// </remarks>
+        [Conditional("TRACE")]
+        public static void Transfer(string message, Guid newActivityId)
+            => _trace.TraceTransfer(message, newActivityId);
+
+        /// <summary>
+        ///   Writes an entry to the log, reporting a new identifier for the current logical activity.
+        /// </summary>
         /// <param name="id">A numeric identifier for the entry.</param>
         /// <param name="message">A message for the entry.</param>
         /// <param name="newActivityId">A new identifier for the current logical activity.</param>
@@ -816,11 +835,37 @@ namespace Sharp.Diagnostics.Logging
         ///   Writes an entry to the log.
         /// </summary>
         /// <param name="eventType">The type of entry to write.</param>
+        /// <param name="message">A message for the entry.</param>
+        [Conditional("TRACE")]
+        public static void Event(TraceEventType eventType, string message)
+            => _trace.TraceEvent(eventType, message);
+
+        /// <summary>
+        ///   Writes an entry to the log.
+        /// </summary>
+        /// <param name="eventType">The type of entry to write.</param>
         /// <param name="id">A numeric identifier for the entry.</param>
         /// <param name="message">A message for the entry.</param>
         [Conditional("TRACE")]
         public static void Event(TraceEventType eventType, int id, string message)
             => _trace.TraceEvent(eventType, id, message);
+
+        /// <summary>
+        ///   Writes an entry to the log.
+        /// </summary>
+        /// <param name="eventType">The type of entry to write.</param>
+        /// <param name="format">A format string to build a message for the entry.</param>
+        /// <param name="args">The objects to substitute into the format string.</param>
+        /// <exception cref="T:System.ArgumentNullException">
+        ///   <paramref name="format"/> is null.
+        /// </exception>
+        /// <exception cref="T:System.FormatException">
+        ///   <paramref name="format"/> is invalid or
+        ///   specifies an argument position not present in <paramref name="args"/>.
+        /// </exception>
+        [Conditional("TRACE")]
+        public static void Event(TraceEventType eventType, string format, params object[] args)
+            => _trace.TraceEvent(eventType, format, args);
 
         /// <summary>
         ///   Writes an entry to the log.
@@ -847,11 +892,29 @@ namespace Sharp.Diagnostics.Logging
         ///   Writes arbitrary object data to the log.
         /// </summary>
         /// <param name="eventType">The type of event to write.</param>
+        /// <param name="data">The object data to include in the event.</param>
+        [Conditional("TRACE")]
+        public static void Data(TraceEventType eventType, object data)
+            => _trace.TraceData(eventType, data);
+
+        /// <summary>
+        ///   Writes arbitrary object data to the log.
+        /// </summary>
+        /// <param name="eventType">The type of event to write.</param>
         /// <param name="id">A numeric identifier for the event.</param>
         /// <param name="data">The object data to include in the event.</param>
         [Conditional("TRACE")]
         public static void Data(TraceEventType eventType, int id, object data)
             => _trace.TraceData(eventType, id, data);
+
+        /// <summary>
+        ///   Writes arbitrary object data to the log.
+        /// </summary>
+        /// <param name="eventType">The type of entry to write.</param>
+        /// <param name="data">The object data to include in the entry.</param>
+        [Conditional("TRACE")]
+        public static void Data(TraceEventType eventType, params object[] data)
+            => _trace.TraceData(eventType, data);
 
         /// <summary>
         ///   Writes arbitrary object data to the log.
