@@ -929,33 +929,69 @@ namespace Sharp.Diagnostics.Logging
         #endregion
         #region Event Handlers
 
+        private static bool
+            _logAllThrownExceptions,    // true => log first-chance exceptions
+            _closeOnExit;               // true => close trace source on exit
+
+        [ThreadStatic]
+        private static int
+            _inEvent;                   // !0 => thread is in first-chance exception handler
+            // NOTE: int instead of bool; Interlocked.CompareExchange does not support bool
+
         /// <summary>
-        ///   Enables logging of all thrown exceptions.
+        ///   Enables or disables logging of ALL thrown exceptions — even caught exceptions.
+        ///   WARNING: This results in an extremely noisy log and degrades application performance.
+        ///   Setting this property is not a thread-safe operation.
         /// </summary>
-        /// <remarks>
-        ///   This method causes ALL exceptions to be logged, even the caught
-        ///   exceptions.  This results in an extremely noisy log.  Use only for
-        ///   debugging, and then only when you are desperate.
-        /// </remarks>
-        public static void ConfigureLogAllThrownExceptions()
+        public static bool LogAllThrownExceptions
         {
-            AppDomain.CurrentDomain.FirstChanceException += AppDomain_FirstChanceException;
+            get => _logAllThrownExceptions;
+            set
+            {
+                if (_logAllThrownExceptions == value)
+                    return;
+
+                var domain = AppDomain.CurrentDomain;
+
+                if (value)
+                    domain.FirstChanceException += AppDomain_FirstChanceException;
+                else
+                    domain.FirstChanceException -= AppDomain_FirstChanceException;
+
+                _logAllThrownExceptions = value;
+            }
         }
 
         /// <summary>
-        ///   Enables handlers that log application termination and close all
+        ///   Enables or disables logging of application termination and automatic closing of
         ///   attached listeners.
         /// </summary>
-        public static void ConfigureCloseOnExit()
+        public static bool CloseOnExit
         {
-            AppDomain.CurrentDomain.UnhandledException += AppDomain_UnhandledException;
-            AppDomain.CurrentDomain.DomainUnload       += AppDomain_DomainUnload;
-            AppDomain.CurrentDomain.ProcessExit        += AppDomain_ProcessExit;
-        }
+            get => _closeOnExit;
+            set
+            {
+                if (_closeOnExit == value)
+                    return;
 
-        // Used to detect and avoid reentrancy in the first-chance exception handler.
-        // Type is int because Interlocked.CompareExchange does not support bool.
-        private static int _inEvent;
+                var domain = AppDomain.CurrentDomain;
+
+                if (value)
+                {
+                    domain.UnhandledException += AppDomain_UnhandledException;
+                    domain.DomainUnload       += AppDomain_DomainUnload;
+                    domain.ProcessExit        += AppDomain_ProcessExit;
+                }
+                else
+                {
+                    domain.UnhandledException -= AppDomain_UnhandledException;
+                    domain.DomainUnload       -= AppDomain_DomainUnload;
+                    domain.ProcessExit        -= AppDomain_ProcessExit;
+                }
+
+                _closeOnExit = value;
+            }
+        }
 
         [SecurityCritical, HandleProcessCorruptedStateExceptions]
         // ^^ These attributes opt-in this handler to receive certain severe
