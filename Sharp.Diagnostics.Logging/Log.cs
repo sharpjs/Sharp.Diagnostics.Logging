@@ -1030,7 +1030,7 @@ namespace Sharp.Diagnostics.Logging
                 // Logging here is best-effort only.  If the logging API throws
                 // an exception here, there is no choice but to ignore it.  The
                 // original exception that fired this event must be allowed to
-                // continue, so it can be caught and handled.
+                // continue, so that it can be caught and handled.
             }
 
             Interlocked.Exchange(ref _inEvent, 0);
