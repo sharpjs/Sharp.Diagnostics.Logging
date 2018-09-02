@@ -16,6 +16,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using static System.Diagnostics.TraceEventType;
@@ -492,6 +493,68 @@ namespace Sharp.Diagnostics.Logging
         #region Operations / Correlation
 
         [Test]
+        public void ActivityId_Default()
+        {
+            Log.ActivityId.Should().BeEmpty();
+        }
+
+        [Test]
+        public void ActivityId_InLogicalOperation()
+        {
+            Guid idA, idB;
+            ExpectTraceOperation("a");
+            ExpectTraceOperation("b");
+
+            using (var opA = Log.Operation("a"))
+            {
+                idA = Log.ActivityId;
+
+                using (var opB = Log.Operation("b"))
+                {
+                    idB = Log.ActivityId;
+                }
+            }
+
+            idA.Should().NotBeEmpty();
+            idB.Should().Be(idA);
+        }
+
+        [Test]
+        public void GetOperationStack_Default()
+        {
+            Log.GetOperationStack().Should().NotBeNull().And.BeEmpty();
+        }
+
+        [Test]
+        public void GetOperationStack_InLogicalOperation()
+        {
+            object[] stackA, stackB;
+
+            ExpectTraceOperation("a");
+            ExpectTraceOperation("b");
+
+            using (var opA = Log.Operation("a"))
+            {
+                stackA = Log.GetOperationStack();
+
+                using (var opB = Log.Operation("b"))
+                {
+                    stackB = Log.GetOperationStack();
+                }
+            }
+
+            stackA.Should().HaveCount(1);           // [opA]
+            var a0 = (Guid) stackA[0];
+            a0.Should().NotBeEmpty();
+
+            stackB.Should().HaveCount(2);           // [opB, opA]
+            var b0 = (Guid) stackB[0];
+            var b1 = (Guid) stackB[1];
+            b0.Should().NotBeEmpty().And.NotBe(a0);
+            b1.Should().Be(a0);
+        }
+
+        [Test]
         public void Operation()
         {
             ExpectTraceOperation("foo");
@@ -513,6 +576,23 @@ namespace Sharp.Diagnostics.Logging
         {
             ExpectTraceOperation("foo");
             var result = Log.Do("foo", () => 42);
+            result.Should().Be(42);
+        }
+
+        [Test]
+        public async Task DoAsync_Action()
+        {
+            ExpectTraceOperation("foo");
+            var count = 0;
+            await Log.DoAsync("foo", () => { count++; return Task.CompletedTask; });
+            count.Should().Be(1);
+        }
+
+        [Test]
+        public async Task DoAsync_Func()
+        {
+            ExpectTraceOperation("foo");
+            var result = await Log.DoAsync("foo", () => Task.FromResult(42));
             result.Should().Be(42);
         }
 
