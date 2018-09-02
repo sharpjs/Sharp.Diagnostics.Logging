@@ -771,6 +771,30 @@ namespace Sharp.Diagnostics.Logging
             Log.SimulateFirstChanceException(new FirstChanceExceptionEventArgs(e));
         }
 
+        [Test]
+        public void CloseOnExit_UnhandledException_NullEventArgs()
+        {
+            // This should not ever happen, but test for it anyway.
+            Log.SimulateUnhandledException(null);
+        }
+
+        [Test]
+        public void CloseOnExit_UnhandledException_NullException()
+        {
+            // This should not ever happen, but test for it anyway.
+            var args = new UnhandledExceptionEventArgs(null, false);
+            Log.SimulateUnhandledException(args);
+        }
+
+        [Test]
+        public void CloseOnExit_UnhandledException_SecondaryException()
+        {
+            // Listener will throw due to its Trace* methods not being set up
+            var e = new ApplicationException("test");
+            var args = new UnhandledExceptionEventArgs(e, false);
+            Log.SimulateUnhandledException(args);
+        }
+
         #endregion
     }
 }
