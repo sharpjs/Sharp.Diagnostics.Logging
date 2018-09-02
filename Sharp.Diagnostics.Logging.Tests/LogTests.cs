@@ -15,9 +15,11 @@
 */
 
 using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using static System.Diagnostics.TraceEventType;
 
@@ -687,6 +689,60 @@ namespace Sharp.Diagnostics.Logging
             var b = new object();
             ExpectTraceData(Verbose, 42, a, b);
             Log.Data(Verbose, 42, a, b);
+        }
+
+        #endregion
+        #region Event Handlers
+
+        [Test]
+        public void LogAllThrownExceptions()
+        {
+            var exceptions = new ConcurrentBag<string>();
+
+            Listener
+                .Setup(t => t.TraceEvent(
+                    It.IsNotNull<TraceEventCache>(),
+                    Trace.Name, Verbose, 0,
+                    "An exception was thrown of type {0}: {1}",
+                    It.Is<object[]>(a => a.Length == 2)
+                ))
+                .Callback((TraceEventCache cache, string name, TraceEventType type, int id, string format, object[] args) =>
+                {
+                    // Capture exception.ToString()
+                    exceptions.Add(args[1] as string);
+
+                    // Verify that Log ignores reentrancy caused by first-chance
+                    // exceptions in the trace source and listeners
+                    CauseFirstChanceException("*POW*");
+                });
+
+            try
+            {
+                Log.LogAllThrownExceptions = true;
+                CauseFirstChanceException("*YEP*");
+            }
+            finally
+            {
+                Log.LogAllThrownExceptions = false;
+                CauseFirstChanceException("*NOPE*");
+            }
+
+            exceptions.Should().Contain(s
+                => s.IndexOf("*YEP*", StringComparison.Ordinal) >= 0
+            );
+
+            exceptions.Should().NotContain(s
+                => s.IndexOf("*NOPE*", StringComparison.Ordinal) >= 0
+            );
+
+            exceptions.Should().NotContain(s
+                => s.IndexOf("*POW*", StringComparison.Ordinal) >= 0
+            );
+        }
+
+        private void CauseFirstChanceException(string message)
+        {
+            try { throw new ApplicationException(message); } catch { }
         }
 
         #endregion
