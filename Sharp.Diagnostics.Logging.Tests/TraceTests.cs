@@ -46,6 +46,17 @@ namespace Sharp.Diagnostics.Logging
 
         public abstract TraceSource GetTraceSource();
 
+        protected void ExpectTraceEvent(TraceEventType type, int id)
+        {
+            Listener
+                .Setup(t => t.TraceEvent(
+                    It.IsNotNull<TraceEventCache>(),
+                    Trace.Name,
+                    type, id
+                ))
+                .Verifiable();
+        }
+
         protected void ExpectTraceEvent(TraceEventType type, int id, string message)
         {
             Listener

@@ -617,6 +617,14 @@ namespace Sharp.Diagnostics.Logging
         #region Event
 
         [Test]
+        public void Event_Id()
+        {
+            // Not really the most useful overload, but provided because TraceSource has it.
+            ExpectTraceEvent(Verbose, 42);
+            Log.Event(Verbose, 42);
+        }
+
+        [Test]
         public void Event_Message()
         {
             ExpectTraceEvent(Verbose, 0, "a");
