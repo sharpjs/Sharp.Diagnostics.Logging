@@ -697,19 +697,24 @@ namespace Sharp.Diagnostics.Logging
         [Test]
         public void LogAllThrownExceptions()
         {
-            var exceptions = new ConcurrentBag<string>();
+            var exceptions = new ConcurrentBag<Exception>();
 
             Listener
                 .Setup(t => t.TraceEvent(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name, Verbose, 0,
+                    It.IsNotNull<TraceEventCache>(), Trace.Name, Verbose, 0,
                     "An exception was thrown of type {0}: {1}",
                     It.Is<object[]>(a => a.Length == 2)
+                ));
+
+            Listener
+                .Setup(t => t.TraceData(
+                    It.IsNotNull<TraceEventCache>(), Trace.Name, Verbose, 0,
+                    It.IsNotNull<Exception>()
                 ))
-                .Callback((TraceEventCache cache, string name, TraceEventType type, int id, string format, object[] args) =>
+                .Callback((TraceEventCache cache, string name, TraceEventType type, int id, object data) =>
                 {
-                    // Capture exception.ToString()
-                    exceptions.Add(args[1] as string);
+                    // Capture exception
+                    exceptions.Add(data as Exception);
 
                     // Verify that Log ignores reentrancy caused by first-chance
                     // exceptions in the trace source and listeners
@@ -727,17 +732,9 @@ namespace Sharp.Diagnostics.Logging
                 CauseFirstChanceException("*NOPE*");
             }
 
-            exceptions.Should().Contain(s
-                => s.IndexOf("*YEP*", StringComparison.Ordinal) >= 0
-            );
-
-            exceptions.Should().NotContain(s
-                => s.IndexOf("*NOPE*", StringComparison.Ordinal) >= 0
-            );
-
-            exceptions.Should().NotContain(s
-                => s.IndexOf("*POW*", StringComparison.Ordinal) >= 0
-            );
+            exceptions.Should().   Contain(e => e is ApplicationException && e.Message == "*YEP*" );
+            exceptions.Should().NotContain(e => e is ApplicationException && e.Message == "*NOPE*");
+            exceptions.Should().NotContain(e => e is ApplicationException && e.Message == "*POW*" );
         }
 
         private void CauseFirstChanceException(string message)
