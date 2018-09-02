@@ -32,8 +32,38 @@ namespace Sharp.Diagnostics.Logging
         public override TraceSource GetTraceSource()
             => _Trace;
 
-        private abstract class Log : Log<LogTests> { }
+        private class Log : Log<LogTests> { }
 
+        #region Constructor / Properties / Misc
+
+        [Test]
+        public void Construct()
+        {
+            this.Invoking(_ => new Log())
+                .Should().Throw<NotSupportedException>();
+        }
+
+        [Test]
+        public void TraceSourceProperty()
+        {
+            Log.TraceSource.Should().BeSameAs(Trace);
+        }
+
+        [Test]
+        public void Flush()
+        {
+            Listener.Setup(t => t.Flush());
+            Log.Flush();
+        }
+
+        [Test]
+        public void Close()
+        {
+            Listener.Setup(t => t.Close());
+            Log.Close();
+        }
+
+        #endregion
         #region Critical
 
         [Test]
