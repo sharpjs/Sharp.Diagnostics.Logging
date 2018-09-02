@@ -725,11 +725,17 @@ namespace Sharp.Diagnostics.Logging
             try
             {
                 Log.LogAllThrownExceptions = true;
+                Log.LogAllThrownExceptions.Should().BeTrue();
+                Log.LogAllThrownExceptions = true;
+                Log.LogAllThrownExceptions.Should().BeTrue();
                 CauseFirstChanceException("*YEP*");
             }
             finally
             {
                 Log.LogAllThrownExceptions = false;
+                Log.LogAllThrownExceptions.Should().BeFalse();
+                Log.LogAllThrownExceptions = false;
+                Log.LogAllThrownExceptions.Should().BeFalse();
                 CauseFirstChanceException("*NOPE*");
             }
 
