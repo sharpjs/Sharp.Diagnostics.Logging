@@ -1109,6 +1109,21 @@ namespace Sharp.Diagnostics.Logging
             AppDomain_FirstChanceException(AppDomain.CurrentDomain, e);
         }
 
+        internal static void SimulateUnhandledException(UnhandledExceptionEventArgs e)
+        {
+            AppDomain_UnhandledException(AppDomain.CurrentDomain, e);
+        }
+
+        internal static void SimulateDomainUnload()
+        {
+            AppDomain_DomainUnload(AppDomain.CurrentDomain, EventArgs.Empty);
+        }
+
+        internal static void SimulateProcessExit()
+        {
+            AppDomain_ProcessExit(AppDomain.CurrentDomain, EventArgs.Empty);
+        }
+
         #endregion
     }
 }
