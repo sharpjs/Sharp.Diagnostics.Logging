@@ -17,34 +17,16 @@
 using System;
 using System.Diagnostics;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using static System.Diagnostics.TraceEventType;
 
 namespace Sharp.Diagnostics.Logging
 {
     [TestFixture]
-    public class TraceSourceExtensionsTests
+    public class TraceSourceExtensionsTests : TraceTests
     {
-        private Mock<TraceListener> Listener;
-        private TraceSource         Trace;
-
-        [SetUp]
-        public void SetUp()
-        {
-            Listener = new Mock<TraceListener>(MockBehavior.Strict);
-
-            Trace = new TraceSource(nameof(TraceSourceExtensionsTests));
-            Trace.Switch.Level = SourceLevels.All;
-            Trace.Listeners.Clear();
-            Trace.Listeners.Add(Listener.Object);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            Listener.Verify();
-        }
+        public override TraceSource GetTraceSource()
+            => new TraceSource(nameof(TraceSourceExtensionsTests), SourceLevels.All);
 
         #region Critical
 
@@ -586,87 +568,6 @@ namespace Sharp.Diagnostics.Logging
             var b = new object();
             ExpectTraceData(Verbose, 42, a, b);
             Trace.TraceData(Verbose, 42, a, b);
-        }
-
-        #endregion
-        #region Expectations
-
-        protected void ExpectTraceEvent(TraceEventType type, int id, string message)
-        {
-            Listener
-                .Setup(t => t.TraceEvent(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    type, id, message
-                ))
-                .Verifiable();
-        }
-
-        protected void ExpectTraceEvent(TraceEventType type, int id, string format, params object[] args)
-        {
-            Listener
-                .Setup(t => t.TraceEvent(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    type, id, format, args
-                ))
-                .Verifiable();
-        }
-
-        protected void ExpectTraceData(TraceEventType type, int id, object data)
-        {
-            Listener
-                .Setup(t => t.TraceData(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    type, id, data
-                ))
-                .Verifiable();
-        }
-
-        protected void ExpectTraceData(TraceEventType type, int id, params object[] data)
-        {
-            Listener
-                .Setup(t => t.TraceData(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    type, id, data
-                ))
-                .Verifiable();
-        }
-
-        protected void ExpectTraceOperation(string name)
-        {
-            Listener
-                .Setup(t => t.TraceEvent(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    Information, 0,
-                    It.Is<string>(s => s.IndexOf("Starting", StringComparison.Ordinal) >= 0),
-                    It.IsAny<object[]>()
-                ))
-                .Verifiable();
-
-            Listener
-                .Setup(t => t.TraceEvent(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    Information, 0,
-                    It.Is<string>(s => s.IndexOf("Completed", StringComparison.Ordinal) >= 0),
-                    It.IsAny<object[]>()
-                ))
-                .Verifiable();
-        }
-
-        protected void ExpectTraceTransfer(int id, string message, Guid activityId)
-        {
-            Listener
-                .Setup(t => t.TraceTransfer(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    id, message, activityId
-                ))
-                .Verifiable();
         }
 
         #endregion
