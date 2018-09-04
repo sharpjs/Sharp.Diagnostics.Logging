@@ -1,8 +1,9 @@
 # Build Products
 obj/
 bin/
-/packages/
 /dist/
+/coverage/
+/packages/
 
 # Visual Studio
 .vs/
