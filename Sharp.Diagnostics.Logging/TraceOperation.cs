@@ -273,8 +273,9 @@ namespace Sharp.Diagnostics.Logging
             if (exception != null)
             {
                 if (trace != null)
-                    trace.TraceEvent(TraceEventType.Error, 0, exception.ToString());
+                    trace.TraceData(TraceEventType.Error, 0, exception);
                 else
+                    // The legacy Trace API does not have a TraceData method.
                     Trace.TraceError(exception.ToString());
 
                 notice = " [EXCEPTION]";
