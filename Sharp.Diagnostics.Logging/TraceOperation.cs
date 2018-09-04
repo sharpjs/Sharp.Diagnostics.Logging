@@ -60,17 +60,23 @@ namespace Sharp.Diagnostics.Logging
         {
             _trace = trace;
             _name  = name;
+
             if (Trace.CorrelationManager.LogicalOperationStack.Count == 0)
                 Trace.CorrelationManager.ActivityId = Guid.NewGuid();
+
             Trace.CorrelationManager.StartLogicalOperation();
+
             TraceStarting();
+
             _start = DateTime.UtcNow;
         }
 
         private void Dispose()
         {
             TraceCompleted();
+
             Trace.CorrelationManager.StopLogicalOperation();
+
             if (Trace.CorrelationManager.LogicalOperationStack.Count == 0)
                 Trace.CorrelationManager.ActivityId = Guid.Empty;
         }
