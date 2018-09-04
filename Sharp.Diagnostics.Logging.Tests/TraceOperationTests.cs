@@ -32,6 +32,23 @@ namespace Sharp.Diagnostics.Logging
             => new TraceSource(nameof(TraceOperationTests), SourceLevels.All);
 
         [Test]
+        public void Construct_TraceSource()
+        {
+            ExpectTraceOperation("a");
+
+            using (var op = new TraceOperation(Trace, "a")) { }
+        }
+
+        [Test]
+        public void Construct_StaticTrace()
+        {
+            UseStaticTraceApi();
+            ExpectTraceOperation("a");
+
+            using (var op = new TraceOperation("a")) { }
+        }
+
+        [Test]
         public void Name_Default()
         {
             ExpectTraceOperation(nameof(Name_Default));
