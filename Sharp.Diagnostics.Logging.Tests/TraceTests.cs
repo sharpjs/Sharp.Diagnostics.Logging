@@ -16,43 +16,82 @@
 
 using System;
 using System.Diagnostics;
-using FluentAssertions;
+using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
 using Moq;
 using NUnit.Framework;
 using static System.Diagnostics.TraceEventType;
+using StaticTrace = System.Diagnostics.Trace;
 
 namespace Sharp.Diagnostics.Logging
 {
     public abstract class TraceTests : ITraceSourceProvider
     {
-        protected Mock<TraceListener> Listener { get; private set; }
-        protected TraceSource         Trace    { get; private set; }
+        protected Mock<TraceListener>     Listener      { get; private set; }
+        protected TraceSource             Trace         { get; private set; }
+
+        protected bool                    IsStaticTrace { get; private set; }
+        protected string                  TraceName     { get; private set; }
+        protected TraceListenerCollection Listeners     { get; private set; }
 
         [SetUp]
         public virtual void SetUp()
         {
             Listener = new Mock<TraceListener>(MockBehavior.Strict);
+            Trace    = GetTraceSource();
 
-            Trace = GetTraceSource();
-            Trace.Listeners.Clear();
-            Trace.Listeners.Add(Listener.Object);
+            UseTraceSourceApi();
         }
 
         [TearDown]
         public virtual void TearDown()
         {
+            UnregisterListener();
+
             Listener.Verify();
         }
 
         public abstract TraceSource GetTraceSource();
 
+        protected void UseTraceSourceApi()
+        {
+            UnregisterListener();
+
+            IsStaticTrace = false;
+            TraceName     = Trace.Name;
+            Listeners     = Trace.Listeners;
+
+            RegisterListener();
+        }
+
+        protected void UseStaticTraceApi()
+        {
+            UnregisterListener();
+
+            IsStaticTrace = true;
+            TraceName     = Path.GetFileName(Environment.GetCommandLineArgs()[0]);
+            Listeners     = StaticTrace.Listeners;
+
+            RegisterListener();
+        }
+
+        private void RegisterListener()
+        {
+            Listeners.Clear();
+            Listeners.Add(Listener.Object);
+        }
+
+        private void UnregisterListener()
+        {
+            Listeners?.Clear();
+        }
+
         protected void ExpectTraceEvent(TraceEventType type, int id)
         {
             Listener
                 .Setup(t => t.TraceEvent(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    type, id
+                    It.IsNotNull<TraceEventCache>(), TraceName, type, id
                 ))
                 .Verifiable();
         }
@@ -61,9 +100,17 @@ namespace Sharp.Diagnostics.Logging
         {
             Listener
                 .Setup(t => t.TraceEvent(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    type, id, message
+                    It.IsNotNull<TraceEventCache>(), TraceName, type, id, message
+                ))
+                .Verifiable();
+        }
+
+        protected void ExpectTraceEvent(TraceEventType type, int id,
+            Expression<Func<string, bool>> message)
+        {
+            Listener
+                .Setup(t => t.TraceEvent(
+                    It.IsNotNull<TraceEventCache>(), TraceName, type, id, It.Is(message)
                 ))
                 .Verifiable();
         }
@@ -72,9 +119,18 @@ namespace Sharp.Diagnostics.Logging
         {
             Listener
                 .Setup(t => t.TraceEvent(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    type, id, format, args
+                    It.IsNotNull<TraceEventCache>(), TraceName, type, id, format, args
+                ))
+                .Verifiable();
+        }
+
+        protected void ExpectTraceEvent(TraceEventType type, int id,
+            Expression<Func<string,   bool>> format,
+            Expression<Func<object[], bool>> args)
+        {
+            Listener
+                .Setup(t => t.TraceEvent(
+                    It.IsNotNull<TraceEventCache>(), TraceName, type, id, It.Is(format), It.Is(args)
                 ))
                 .Verifiable();
         }
@@ -83,9 +139,7 @@ namespace Sharp.Diagnostics.Logging
         {
             Listener
                 .Setup(t => t.TraceData(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    type, id, data
+                    It.IsNotNull<TraceEventCache>(), TraceName, type, id, data
                 ))
                 .Verifiable();
         }
@@ -94,32 +148,7 @@ namespace Sharp.Diagnostics.Logging
         {
             Listener
                 .Setup(t => t.TraceData(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    type, id, data
-                ))
-                .Verifiable();
-        }
-
-        protected void ExpectTraceOperation(string name)
-        {
-            Listener
-                .Setup(t => t.TraceEvent(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    Information, 0,
-                    It.Is<string>(s => s.IndexOf("Starting", StringComparison.Ordinal) >= 0),
-                    It.IsAny<object[]>()
-                ))
-                .Verifiable();
-
-            Listener
-                .Setup(t => t.TraceEvent(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    Information, 0,
-                    It.Is<string>(s => s.IndexOf("Completed", StringComparison.Ordinal) >= 0),
-                    It.IsAny<object[]>()
+                    It.IsNotNull<TraceEventCache>(), TraceName, type, id, data
                 ))
                 .Verifiable();
         }
@@ -128,11 +157,25 @@ namespace Sharp.Diagnostics.Logging
         {
             Listener
                 .Setup(t => t.TraceTransfer(
-                    It.IsNotNull<TraceEventCache>(),
-                    Trace.Name,
-                    id, message, activityId
+                    It.IsNotNull<TraceEventCache>(), TraceName, id, message, activityId
                 ))
                 .Verifiable();
         }
+
+        protected void ExpectTraceOperation(string name)
+        {
+            if (IsStaticTrace)
+                ExpectTraceEvent(Information, 0, name + ": Starting");
+            else
+                ExpectTraceEvent(Information, 0, name + ": Starting", null);
+
+            ExpectTraceEvent(Information, 0,
+                s => s.Contains(": Completed"), // ordinal
+                a => a.OfType<string>().Contains(name, StringComparer.Ordinal)
+            );
+        }
+
+        protected static Exception CreateTestException()
+            => new ApplicationException("Something bad happened.");
     }
 }
