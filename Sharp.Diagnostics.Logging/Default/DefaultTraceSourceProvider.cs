@@ -24,7 +24,13 @@ namespace Sharp.Diagnostics.Logging.Default
     /// </summary>
     public class DefaultTraceSourceProvider : ITraceSourceProvider
     {
+        /// <summary>
+        ///   The name of the <c>TraceSource</c> returned by
+        ///   <see cref="GetTraceSource"/>.
+        /// </summary>
+        public const string TraceSourceName = "Log";
+
         /// <inheritdoc/>
-        public TraceSource GetTraceSource() => new TraceSource("Log");
+        public TraceSource GetTraceSource() => new TraceSource(TraceSourceName);
     }
 }
