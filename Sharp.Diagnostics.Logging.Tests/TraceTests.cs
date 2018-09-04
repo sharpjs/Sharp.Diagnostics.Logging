@@ -19,6 +19,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using Moq;
 using NUnit.Framework;
 using static System.Diagnostics.TraceEventType;
@@ -39,61 +40,56 @@ namespace Sharp.Diagnostics.Logging
         protected string                  TraceName     { get; private set; }
         protected TraceListenerCollection Listeners     { get; private set; }
 
+        private static readonly object
+            StaticTraceLock = new object();
+
         [SetUp]
         public virtual void SetUp()
         {
             Listener = new Mock<TraceListener>(MockBehavior.Strict);
             Trace    = GetTraceSource();
 
-            UseTraceSourceApi();
+            SetApi(Trace.Name, Trace.Listeners, isStatic: false);
         }
 
         [TearDown]
         public virtual void TearDown()
         {
-            UnregisterListener();
+            Listeners.Clear();
+
+            if (IsStaticTrace)
+                Monitor.Exit(StaticTraceLock);
 
             Listener.Verify();
         }
 
         public abstract TraceSource GetTraceSource();
 
-        protected void UseTraceSourceApi()
-        {
-            UnregisterListener();
-
-            IsStaticTrace = false;
-            TraceName     = Trace.Name;
-            Listeners     = Trace.Listeners;
-
-            RegisterListener();
-        }
-
+        // Called never or once by test
         protected void UseStaticTraceApi()
         {
-            UnregisterListener();
-
             #if NETCOREAPP
-                TraceName = Assembly.GetEntryAssembly()?.GetName().Name ?? string.Empty;
+                var appName = Assembly.GetEntryAssembly()?.GetName().Name ?? string.Empty;
             #else
-                TraceName = Path.GetFileName(Environment.GetCommandLineArgs()[0]);
+                var appName = Path.GetFileName(Environment.GetCommandLineArgs()[0]);
             #endif
 
-            IsStaticTrace = true;
-            Listeners     = StaticTrace.Listeners;
+            Listeners.Clear();
 
-            RegisterListener();
+            // Tests using the static trace API must be single-threaded
+            Monitor.Enter(StaticTraceLock);
+
+            SetApi(appName, StaticTrace.Listeners, isStatic: true);
         }
 
-        private void RegisterListener()
+        private void SetApi(string name, TraceListenerCollection listeners, bool isStatic)
         {
+            IsStaticTrace = isStatic;
+            TraceName     = name;
+            Listeners     = listeners;
+
             Listeners.Clear();
             Listeners.Add(Listener.Object);
-        }
-
-        private void UnregisterListener()
-        {
-            Listeners?.Clear();
         }
 
         protected void ExpectTraceEvent(TraceEventType type, int id)
