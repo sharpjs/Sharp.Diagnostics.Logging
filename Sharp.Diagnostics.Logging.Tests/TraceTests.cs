@@ -24,6 +24,10 @@ using NUnit.Framework;
 using static System.Diagnostics.TraceEventType;
 using StaticTrace = System.Diagnostics.Trace;
 
+#if NETCOREAPP
+using System.Reflection;
+#endif
+
 namespace Sharp.Diagnostics.Logging
 {
     public abstract class TraceTests : ITraceSourceProvider
@@ -69,8 +73,13 @@ namespace Sharp.Diagnostics.Logging
         {
             UnregisterListener();
 
+            #if NETCOREAPP
+                TraceName = Assembly.GetEntryAssembly()?.GetName().Name ?? string.Empty;
+            #else
+                TraceName = Path.GetFileName(Environment.GetCommandLineArgs()[0]);
+            #endif
+
             IsStaticTrace = true;
-            TraceName     = Path.GetFileName(Environment.GetCommandLineArgs()[0]);
             Listeners     = StaticTrace.Listeners;
 
             RegisterListener();
