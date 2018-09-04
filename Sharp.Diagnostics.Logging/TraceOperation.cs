@@ -133,6 +133,17 @@ namespace Sharp.Diagnostics.Logging
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        [DebuggerStepThrough]
+        public static Task DoAsync(string name, Func<Task> action)
+        {
+            return DoAsync(null, name, action);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="trace"></param>
         /// <param name="name"></param>
         /// <param name="action"></param>
@@ -192,6 +203,19 @@ namespace Sharp.Diagnostics.Logging
         public static TResult Do<TResult>(string name, Func<TResult> action)
         {
             return Do(null, name, action);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        public static Task<TResult> DoAsync<TResult>(string name, Func<Task<TResult>> action)
+        {
+            return DoAsync(null, name, action);
         }
 
         /// <summary>
