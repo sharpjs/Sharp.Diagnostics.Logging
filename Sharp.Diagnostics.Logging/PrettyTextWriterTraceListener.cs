@@ -66,42 +66,54 @@ namespace Sharp.Diagnostics.Logging
         /// <inheritdoc/>
         public override void TraceEvent(TraceEventCache e, string source, TraceEventType type, int id, string message)
         {
+            if (!TryGetWriter(out var writer))
+                return;
+
             if (!ShouldTrace(e, source, type, id, message))
                 return;
 
             WriteHeader(e, type, id);
-            Writer.Write(message);
+            writer.Write(message);
             WriteFooter(source);
         }
 
         /// <inheritdoc/>
         public override void TraceEvent(TraceEventCache e, string source, TraceEventType type, int id, string format, params object[] args)
         {
+            if (!TryGetWriter(out var writer))
+                return;
+
             if (!ShouldTrace(e, source, type, id, format, args))
                 return;
 
             WriteHeader(e, type, id);
             if (args != null)
-                Writer.Write(string.Format(format, args));
+                writer.Write(string.Format(format, args));
             else
-                Writer.Write(format);
+                writer.Write(format);
             WriteFooter(source);
         }
 
         /// <inheritdoc/>
         public override void TraceData(TraceEventCache e, string source, TraceEventType type, int id, object obj)
         {
+            if (!TryGetWriter(out var writer))
+                return;
+
             if (!ShouldTrace(e, source, type, id, obj: obj))
                 return;
 
             WriteHeader(e, type, id);
-            Writer.Write(Format(obj));
+            writer.Write(Format(obj));
             WriteFooter(source);
         }
 
         /// <inheritdoc/>
         public override void TraceData(TraceEventCache e, string source, TraceEventType type, int id, params object[] objs)
         {
+            if (!TryGetWriter(out var writer))
+                return;
+
             if (!ShouldTrace(e, source, type, id, objs: objs))
                 return;
 
@@ -119,14 +131,20 @@ namespace Sharp.Diagnostics.Logging
         /// <inheritdoc/>
         public override void Write(string message)
         {
-            Writer.Write(message);
+            if (!TryGetWriter(out var writer))
+                return;
+
+            writer.Write(message);
             NeedIndent = false;
         }
 
         /// <inheritdoc/>
         public override void WriteLine(string message)
         {
-            Writer.WriteLine(message);
+            if (!TryGetWriter(out var writer))
+                return;
+
+            writer.WriteLine(message);
             NeedIndent = true;
         }
 
@@ -230,6 +248,13 @@ namespace Sharp.Diagnostics.Logging
             return obj == null ? "(null)" : obj.ToString();
         }
 
+        private bool TryGetWriter(out TextWriter writer)
+        {
+            var instance = writer = Writer;
+            return instance != null
+                && instance != TextWriter.Null;
+        }
+
         private bool ShouldTrace(TraceEventCache e, string source, TraceEventType type, int id,
             string message = null, object[] args = null, object obj = null, object[] objs = null)
         {
@@ -303,8 +328,10 @@ namespace Sharp.Diagnostics.Logging
             catch
             {
                 // Use best effort to give the admin a helpful hint
-                NotifyCannotCreateLogFile(path);
-                throw;
+                NotifyCannotCreateLogFile(path, shim);
+
+                // Disable the listener
+                return null;
             }
         }
 
