@@ -273,6 +273,8 @@ namespace Sharp.Diagnostics.Logging
                     log.Source = "Application";
                     log.WriteEntry(message, EventLogEntryType.Error);
                 }
+#else
+                Console.Error.WriteLine(message);
 #endif
             }
             catch
