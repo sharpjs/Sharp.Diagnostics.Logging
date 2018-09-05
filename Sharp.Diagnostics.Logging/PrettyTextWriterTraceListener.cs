@@ -112,7 +112,7 @@ namespace Sharp.Diagnostics.Logging
         /// <inheritdoc/>
         public override void TraceTransfer(TraceEventCache e, string source, int id, string message, Guid relatedActivityId)
         {
-            TraceEvent(e, source, TraceEventType.Transfer, id, "{0} {related:{1}}", message, relatedActivityId.ToString());
+            TraceEvent(e, source, TraceEventType.Transfer, id, "{0} {{related:{1}}}", message, relatedActivityId);
         }
 
         /// <inheritdoc/>
