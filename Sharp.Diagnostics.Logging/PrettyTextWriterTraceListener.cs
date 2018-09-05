@@ -241,7 +241,7 @@ namespace Sharp.Diagnostics.Logging
                 // The path *should* work at this point
                 return path;
             }
-            catch (Exception)
+            catch
             {
                 // Use best effort to give the admin a helpful hint
                 NotifyCannotCreateLogFile(path);
