@@ -265,16 +265,15 @@ namespace Sharp.Diagnostics.Logging
         {
             try
             {
-                #if NETFX
+                var message = $"Unable to create log file: {path}";
+
+#if NETFRAMEWORK
                 using (var log = new EventLog("Application"))
                 {
                     log.Source = "Application";
-                    log.WriteEntry(
-                        $"Unable to create log file: {path}",
-                        EventLogEntryType.Error
-                    );
+                    log.WriteEntry(message, EventLogEntryType.Error);
                 }
-                #endif
+#endif
             }
             catch
             {
