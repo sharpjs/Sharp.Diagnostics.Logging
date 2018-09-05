@@ -17,10 +17,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-
-#if !NETFRAMEWORK
 using System.Text;
-#endif
 
 namespace Sharp.Diagnostics.Logging
 {
@@ -49,11 +46,15 @@ namespace Sharp.Diagnostics.Logging
         ///   The path of the file to write, relative to the program.
         /// </param>
         public PrettyTextWriterTraceListener(string fileName)
+            : this(fileName, new Shim()) { }
+
+        // For testing
+        internal PrettyTextWriterTraceListener(string fileName, IShim shim)
 #if NETFRAMEWORK
-            : base(GetFullPath(fileName)) { }
+            : base(GetFullPath(fileName, shim)) { }
 #else
             // Workaround for .NET Core bug https://github.com/dotnet/corefx/issues/28747
-            : base(CreateWriter(GetFullPath(fileName))) { }
+            : base(CreateWriter(fileName, shim)) { }
 #endif
 
         /// <inheritdoc/>
@@ -218,6 +219,12 @@ namespace Sharp.Diagnostics.Logging
             // Do nothing
         }
 
+        // For testing
+        internal void InvokeWriteIndent()
+        {
+            WriteIndent();
+        }
+
         private static string Format(object obj)
         {
             return obj == null ? "(null)" : obj.ToString();
@@ -231,7 +238,50 @@ namespace Sharp.Diagnostics.Logging
                 || filter.ShouldTrace(e, source, type, id, message, args, obj, objs);
         }
 
-        private static string GetFullPath(string fileName)
+#if !NETFRAMEWORK
+        // Workaround for .NET Core bug https://github.com/dotnet/corefx/issues/28747
+
+        private static TextWriter CreateWriter(string path, IShim shim)
+        {
+            path = GetFullPath(path, shim);
+            if (path == null)
+                // Disable the listener
+                return TextWriter.Null;
+
+            var name = Path.GetFileName(path);
+
+            var encoding = new UTF8Encoding(
+                encoderShouldEmitUTF8Identifier: false,
+                throwOnInvalidBytes:             false
+            );
+
+            for (var i = 0; i < 2; i++)
+            {
+                try
+                {
+                    return shim.CreateStreamWriter(path, encoding);
+                }
+                catch (IOException)
+                {
+                    // Retry using a fallback filename
+                    var fallbackName = Guid.NewGuid().ToString() + name;
+                    path = Path.GetDirectoryName(path);
+                    path = Path.Combine(path, fallbackName);
+                    continue;
+                }
+                catch
+                {
+                    // Give up
+                    break;
+                }
+            }
+
+            // Disable the listener
+            return TextWriter.Null;
+        }
+#endif
+
+        private static string GetFullPath(string fileName, IShim shim)
         {
             // Choose a reasonable default file name
             var path = string.IsNullOrEmpty(fileName)
@@ -270,61 +320,11 @@ namespace Sharp.Diagnostics.Logging
             File.Delete(probe);
         }
 
-#if !NETFRAMEWORK
-        // Workaround for .NET Core bug https://github.com/dotnet/corefx/issues/28747
-
-        private const int BufferSize = 4096; // bytes
-
-        private static TextWriter CreateWriter(string path)
-        {
-            var name = Path.GetFileName(path);
-
-            var encoding = new UTF8Encoding(
-                encoderShouldEmitUTF8Identifier: false,
-                throwOnInvalidBytes:             false
-            );
-
-            for (var i = 0; i < 2; i++)
-            {
-                try
-                {
-                    return new StreamWriter(path, true, encoding, BufferSize);
-                }
-                catch (IOException)
-                {
-                    // Retry using a fallback filename
-                    var fallbackName = Guid.NewGuid().ToString() + name;
-                    path = Path.GetDirectoryName(path);
-                    path = Path.Combine(path, fallbackName);
-                    continue;
-                }
-                catch
-                {
-                    // Give up
-                    break;
-                }
-            }
-
-            // Disable the listener
-            return TextWriter.Null;
-        }
-#endif
-
-        private static void NotifyCannotCreateLogFile(string path)
+        private static void NotifyCannotCreateLogFile(string path, IShim shim)
         {
             try
             {
-                var message = $"Unable to create log file: {path}";
-
-#if NETFRAMEWORK
-                using (var log = new EventLog("Application"))
-                {
-                    log.Source = "Application";
-                    log.WriteEntry(message, EventLogEntryType.Error);
-                }
-#else
-                Console.Error.WriteLine(message);
-#endif
+                shim.NotifyCriticalError($"Unable to create log file: {path}");
             }
             catch
             {
@@ -332,5 +332,38 @@ namespace Sharp.Diagnostics.Logging
                 // whatever exception is being processed already.
             }
         }
+
+        internal interface IShim
+        {
+#if NETSTANDARD
+            StreamWriter CreateStreamWriter(string path, Encoding encoding);
+#endif
+            void NotifyCriticalError(string message);
+        }
+
+#if NETFRAMEWORK
+        private class Shim : IShim
+        {
+            public void NotifyCriticalError(string message)
+            {
+                using (var log = new EventLog("Application"))
+                {
+                    log.Source = "Application";
+                    log.WriteEntry(message, EventLogEntryType.Error);
+                }
+            }
+        }
+#else
+        private class Shim : IShim
+        {
+            private const int BufferSize = 4096; // bytes
+
+            public StreamWriter CreateStreamWriter(string path, Encoding encoding)
+                => new StreamWriter(path, true /*append*/, encoding, BufferSize);
+
+            public void NotifyCriticalError(string message)
+                => Console.Error.WriteLine(message);
+        }
+#endif
     }
 }
