@@ -28,37 +28,155 @@ namespace Sharp.Diagnostics.Logging
     [TestFixture]
     public class PrettyTextWriterTraceListenerTests
     {
-        const string Source = "Test";
+        private const string
+            Source      = "Test",
+            InvalidPath = ":\\//*?\"<>\0|"; // consider multiple platforms
 
-        private string          FileName;
+        private string          FilePath;
         private TraceEventCache Cache;
 
         [SetUp]
         public void SetUp()
         {
-            FileName = Path.GetTempFileName();
+            FilePath = Path.GetTempFileName();
             Cache    = new TraceEventCache();
         }
 
         [TearDown]
         public void TearDown()
         {
-            File.Delete(FileName);
+            File.Delete(FilePath);
         }
+
+        private string FileContent
+            => File.ReadAllText(FilePath, Encoding.UTF8);
 
         [Test]
         public void Construct_Default()
         {
             using (var listener = new PrettyTextWriterTraceListener())
+            {
                 listener.Writer.Should().BeSameAs(Console.Out);
+            }
         }
 
         [Test]
-        public void Construct_FileName()
+        public void Construct_AbsolutePath()
         {
-            using (var listener = new PrettyTextWriterTraceListener(FileName))
+            using (var listener = new PrettyTextWriterTraceListener(FilePath))
+            {
                 listener.Writer.Should().NotBeNull().And.NotBeSameAs(Console.Out);
+                listener.Writer.Write("a");
+            }
+
+            FileContent.Should().Be("a");
         }
+
+        [Test]
+        public void Construct_RelativePath()
+        {
+            File.Delete(FilePath); // won't be used
+
+            var name = Path.GetRandomFileName() + ".log";
+            FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, name);
+
+            using (var listener = new PrettyTextWriterTraceListener(name))
+            {
+                listener.Writer.Should().NotBeNull().And.NotBeSameAs(Console.Out);
+                listener.Writer.Write("a");
+            }
+
+            FileContent.Should().Be("a");
+        }
+
+        [Test]
+        public void Construct_InvalidPath()
+        {
+            using (var listener = new PrettyTextWriterTraceListener(InvalidPath))
+            {
+                ShouldBeDisabled(listener);
+            }
+        }
+
+        [Test]
+        public void Construct_InvalidPath_ErrorNotifying()
+        {
+            var shim = new Mock<PrettyTextWriterTraceListener.IShim>();
+
+            shim.Setup(s => s.NotifyCriticalError(It.IsAny<string>()))
+                .Throws<UnauthorizedAccessException>()
+                .Verifiable();
+
+            using (var listener = new PrettyTextWriterTraceListener(InvalidPath, shim.Object))
+            {
+                ShouldBeDisabled(listener);
+            }
+
+            shim.Verify();
+        }
+
+#if NETCOREAPP
+        [Test]
+        public void Construct_IOException_Once()
+        {
+            using (var writer = new StreamWriter(FilePath, true, new UTF8Encoding(false)))
+            {
+                var shim = new Mock<PrettyTextWriterTraceListener.IShim>();
+
+                shim.Setup(s => s.CreateStreamWriter(FilePath, It.IsNotNull<Encoding>()))
+                    .Throws<IOException>()
+                    .Verifiable();
+
+                shim.Setup(s => s.CreateStreamWriter(It.Is<string>(p => p != FilePath), It.IsNotNull<Encoding>()))
+                    .Returns(writer)
+                    .Verifiable();
+
+                using (var listener = new PrettyTextWriterTraceListener(FilePath, shim.Object))
+                {
+                    listener.Writer.Should().BeSameAs(writer);
+                    listener.Writer.Write("a");
+                }
+
+                FileContent.Should().Be("a");
+
+                shim.Verify();
+            }
+        }
+
+        [Test]
+        public void Construct_IOException_Multiple()
+        {
+            var shim = new Mock<PrettyTextWriterTraceListener.IShim>();
+
+            shim.Setup(s => s.CreateStreamWriter(It.IsNotNull<string>(), It.IsNotNull<Encoding>()))
+                .Throws<IOException>()
+                .Verifiable();
+
+            using (var listener = new PrettyTextWriterTraceListener(FilePath, shim.Object))
+            {
+                ShouldBeDisabled(listener);
+            }
+
+            shim.Verify();
+        }
+
+        [Test]
+        public void Construct_OtherError()
+        {
+            var shim = new Mock<PrettyTextWriterTraceListener.IShim>();
+
+            shim.Setup(s => s.CreateStreamWriter(It.IsNotNull<string>(), It.IsNotNull<Encoding>()))
+                .Throws<UnauthorizedAccessException>()
+                .Verifiable();
+
+            using (var listener = new PrettyTextWriterTraceListener(FilePath, shim.Object))
+            {
+                ShouldBeDisabled(listener);
+            }
+
+            shim.Verify();
+        }
+#endif
 
         [Test]
         public void TraceEvent_Id_Unfiltered()
@@ -133,6 +251,18 @@ namespace Sharp.Diagnostics.Logging
                     listener.TraceEvent(Cache, Source, Error, 2, "Fthurp");
                 },
                 expected: ""
+            );
+        }
+
+        [Test]
+        public void TraceEvent_Message_NullMessage()
+        {
+            Test(
+                listener =>
+                {
+                    listener.TraceEvent(Cache, Source, Error, 2, null);
+                },
+                expected: Line(Error, 2, "")
             );
         }
 
@@ -377,28 +507,72 @@ namespace Sharp.Diagnostics.Logging
         }
 
         [Test]
-        public void Write_ThenTraceEvent()
+        public void WriteThenTrace()
         {
             Test(
                 listener =>
                 {
                     listener.Write("Turgle");
-                    listener.TraceEvent(Cache, Source, Error, 2, "Flimp");
+                    listener.TraceEvent(Cache, Source, Error, 10, "Flimp");
                 },
                 expected: string.Concat(
                     "Turgle",
                     Environment.NewLine,
-                    Line(Error, 2, "Flimp")
+                    Line(Error, 10, "Flimp")
                 )
             );
         }
 
+        [Test]
+        public void WriteIndent()
+        {
+            Test(l => l.InvokeWriteIndent(), "");
+        }
+
+        [Test]
+        public void InLogicalOperation()
+        {
+            Trace.CorrelationManager.StartLogicalOperation();
+            try
+            {
+                Test(
+                    listener =>
+                    {
+                        listener.TraceEvent(Cache, Source, Error, 11, "Pfilk");
+                    },
+                    expected: Line(Error, 11, "Pfilk")
+                );
+            }
+            finally
+            {
+                Trace.CorrelationManager.StopLogicalOperation();
+            }
+        }
+
+        private void ShouldBeDisabled(PrettyTextWriterTraceListener listener)
+        {
+#if NETFRAMEWORK
+            listener.Writer.Should().BeNull();
+#else
+            listener.Writer.Should().BeSameAs(TextWriter.Null);
+#endif
+            // These should have no effect
+            listener.TraceEvent   (Cache, Source, Error, 0);
+            listener.TraceEvent   (Cache, Source, Error, 0, "a");
+            listener.TraceEvent   (Cache, Source, Error, 0, "{0}", "a");
+            listener.TraceData    (Cache, Source, Error, 0, "a");
+            listener.TraceData    (Cache, Source, Error, 0, "a", "b");
+            listener.TraceTransfer(Cache, Source,        0, "a", Guid.NewGuid());
+            listener.Write        ("a");
+            listener.WriteLine    ("a");
+        }
+
         private void Test(Action<PrettyTextWriterTraceListener> action, string expected)
         {
-            using (var listener = new PrettyTextWriterTraceListener(FileName))
+            using (var listener = new PrettyTextWriterTraceListener(FilePath))
                 action(listener);
 
-            var content = File.ReadAllText(FileName, Encoding.UTF8);
+            var content = File.ReadAllText(FilePath, Encoding.UTF8);
 
             content.Should().Be(expected);
         }
@@ -423,11 +597,14 @@ namespace Sharp.Diagnostics.Logging
 
         private string Line(TraceEventType type, int id, string message)
         {
+            var ops = Trace.CorrelationManager.LogicalOperationStack;
+
             return string.Format(
-                "[{0:yyyy-MM-dd HH:mm:ss.fff}] ({1}:{2}) {3}:  #{4}: {5} <{6}>{7}",
+                "[{0:yyyy-MM-dd HH:mm:ss.fff}] ({1}:{2}){3} {4}:  #{5}: {6} <{7}>{8}",
                 Cache.DateTime,
                 Cache.ProcessId,
                 Cache.ThreadId,
+                ops.Count > 0 ? $" {{{ops.Peek()}}}" : "",
                 type,
                 id,
                 message,
