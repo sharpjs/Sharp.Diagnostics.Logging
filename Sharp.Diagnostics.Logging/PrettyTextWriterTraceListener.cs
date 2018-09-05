@@ -301,6 +301,8 @@ namespace Sharp.Diagnostics.Logging
                 }
             }
 
+            NotifyCannotCreateLogFile(path, shim);
+
             // Disable the listener
             return TextWriter.Null;
         }

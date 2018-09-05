@@ -152,6 +152,9 @@ namespace Sharp.Diagnostics.Logging
                 .Throws<IOException>()
                 .Verifiable();
 
+            shim.Setup(s => s.NotifyCriticalError(It.IsAny<string>()))
+                .Verifiable();
+
             using (var listener = new PrettyTextWriterTraceListener(FilePath, shim.Object))
             {
                 ShouldBeDisabled(listener);
@@ -167,6 +170,9 @@ namespace Sharp.Diagnostics.Logging
 
             shim.Setup(s => s.CreateStreamWriter(It.IsNotNull<string>(), It.IsNotNull<Encoding>()))
                 .Throws<UnauthorizedAccessException>()
+                .Verifiable();
+
+            shim.Setup(s => s.NotifyCriticalError(It.IsAny<string>()))
                 .Verifiable();
 
             using (var listener = new PrettyTextWriterTraceListener(FilePath, shim.Object))
