@@ -18,6 +18,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
+#if !NETFRAMEWORK
+using System.Text;
+#endif
+
 namespace Sharp.Diagnostics.Logging
 {
     /// <summary>
@@ -45,7 +49,12 @@ namespace Sharp.Diagnostics.Logging
         ///   The path of the file to write, relative to the program.
         /// </param>
         public PrettyTextWriterTraceListener(string fileName)
+#if NETFRAMEWORK
             : base(GetFullPath(fileName)) { }
+#else
+            // Workaround for .NET Core bug https://github.com/dotnet/corefx/issues/28747
+            : base(CreateWriter(GetFullPath(fileName))) { }
+#endif
 
         /// <inheritdoc/>
         public override void TraceEvent(TraceEventCache e, string source, TraceEventType type, int id)
@@ -260,6 +269,46 @@ namespace Sharp.Diagnostics.Logging
             using (File.Open(probe, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read)) { }
             File.Delete(probe);
         }
+
+#if !NETFRAMEWORK
+        // Workaround for .NET Core bug https://github.com/dotnet/corefx/issues/28747
+
+        private const int BufferSize = 4096; // bytes
+
+        private static TextWriter CreateWriter(string path)
+        {
+            var name = Path.GetFileName(path);
+
+            var encoding = new UTF8Encoding(
+                encoderShouldEmitUTF8Identifier: false,
+                throwOnInvalidBytes:             false
+            );
+
+            for (var i = 0; i < 2; i++)
+            {
+                try
+                {
+                    return new StreamWriter(path, true, encoding, BufferSize);
+                }
+                catch (IOException)
+                {
+                    // Retry using a fallback filename
+                    var fallbackName = Guid.NewGuid().ToString() + name;
+                    path = Path.GetDirectoryName(path);
+                    path = Path.Combine(path, fallbackName);
+                    continue;
+                }
+                catch
+                {
+                    // Give up
+                    break;
+                }
+            }
+
+            // Disable the listener
+            return TextWriter.Null;
+        }
+#endif
 
         private static void NotifyCannotCreateLogFile(string path)
         {
