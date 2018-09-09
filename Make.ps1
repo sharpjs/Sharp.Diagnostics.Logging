@@ -62,6 +62,7 @@ function Invoke-TestForTargetFramework {
                 "--dcReportType=HTML"
                 "--dcOutput=..\coverage\$TargetFramework.html"
                 "--dcFilters=+:Sharp.Diagnostics.Logging"
+                "--dcAttributeFilters=System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute"
         }
         "test"
             "--framework:$TargetFramework"
