@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Sharp.Diagnostics.Logging.Sql
@@ -35,6 +36,14 @@ namespace Sharp.Diagnostics.Logging.Sql
         public Guid?  ActivityId  { get; set; }
         public int    MessageId   { get; set; }
         public string Message     { get; set; }
+
+        private IList<LogData> _data;
+
+        public bool HasData
+            => _data?.Count > 0;
+
+        public IList<LogData> Data
+            => _data ?? (_data = new List<LogData>());
 
         internal static ObjectDataMap<LogEntry> Map { get; }
             = new ObjectDataMap<LogEntry>
