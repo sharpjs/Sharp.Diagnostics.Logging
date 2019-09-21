@@ -212,8 +212,8 @@ CREATE TABLE dbo.LogDataType
 
 INSERT dbo.LogDataType
 VALUES
-    ('C', 'Call Stack',       'Call stack trace')
-  , ('L', 'Logical Op Stack', 'Logical operation stack trace')
+    ('C', 'Call Stack',       'Call stack')
+  , ('L', 'Logical Op Stack', 'Logical operation stack')
   , ('T', 'Text',             'Miscellaneous text')
   , ('J', 'JSON',             'Data in JSON format')
 ;
