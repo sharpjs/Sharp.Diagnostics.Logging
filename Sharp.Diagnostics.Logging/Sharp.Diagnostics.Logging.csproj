@@ -22,7 +22,10 @@
   <PropertyGroup>
     <Description>Micro-framework for logging via the .NET TraceSource API</Description>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <GeneratePackageOnBuild>$(VersionIsTagged)</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup Condition="!$(TargetFramework.StartsWith('netstandard'))">
