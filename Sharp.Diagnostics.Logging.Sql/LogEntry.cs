@@ -36,8 +36,8 @@ namespace Sharp.Diagnostics.Logging.Sql
         public int    MessageId   { get; set; }
         public string Message     { get; set; }
 
-        public static readonly ObjectDataMap<LogEntry>
-            Map = new ObjectDataMap<LogEntry>
+        internal static ObjectDataMap<LogEntry> Map { get; }
+            = new ObjectDataMap<LogEntry>
             (b => b
                 .Field("Id",          "int",              e => e.Id)
                 .Field("Date",        "datetime2(3)",     e => e.Date)
