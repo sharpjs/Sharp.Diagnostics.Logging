@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{94772DD9
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		CHANGES.md = CHANGES.md
+		General.cs = General.cs
 		General.props = General.props
 		LICENSE.txt = LICENSE.txt
 		Make.ps1 = Make.ps1
