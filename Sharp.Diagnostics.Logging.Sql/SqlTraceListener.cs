@@ -15,13 +15,16 @@
 */
 
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 //using System.Configuration;
 using System.Data;
 //using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
+using Newtonsoft.Json;
 
 // Temporarily
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -212,8 +215,13 @@ namespace Sharp.Diagnostics.Logging.Sql
                 connection.Open();
             }
 
+            var data = events
+                .Where      (e => e.HasData)
+                .SelectMany (e => e.Data);
+
             // Transmit the events to the server
             _command.Parameters[0].Value = new ObjectDataReader<LogEntry>(events, LogEntry.Map);
+            _command.Parameters[1].Value = new ObjectDataReader<LogData> (data,   LogData .Map);
             _command.ExecuteNonQuery();
 
             // Remove the events from the queue
@@ -285,7 +293,9 @@ namespace Sharp.Diagnostics.Logging.Sql
             if (!ShouldTrace(e, source, type, id, obj: obj))
                 return;
 
-            TraceEventCore(e, source, type, id, obj.ToString());
+            var entry = CreateEntry(e, source, type, id);
+            entry.Data.Add(CreateData(obj));
+            _queue.Enqueue(entry);
         }
 
         public override void TraceData(TraceEventCache e, string source, TraceEventType type, int id, params object[] objs)
@@ -293,7 +303,10 @@ namespace Sharp.Diagnostics.Logging.Sql
             if (!ShouldTrace(e, source, type, id, objs: objs))
                 return;
 
-            TraceEventCore(e, source, type, id, string.Join(Environment.NewLine, objs));
+            var entry = CreateEntry(e, source, type, id);
+            foreach (var obj in objs)
+                entry.Data.Add(CreateData(obj));
+            _queue.Enqueue(entry);
         }
 
         public override void TraceTransfer(TraceEventCache e, string source, int id, string message, Guid relatedActivityId)
@@ -340,11 +353,48 @@ namespace Sharp.Diagnostics.Logging.Sql
             };
         }
 
+        private static LogData CreateData(object obj)
+        {
+            var data = new LogData();
+
+            if (obj is string s)
+            {
+                data.Type = LogDataType.Text;
+                data.Data = s;
+            }
+            else if (obj is Exception e)
+            {
+                data.Type = LogDataType.CallStack;
+                data.Data = e.StackTrace;
+            }
+            else if (obj == Trace.CorrelationManager.LogicalOperationStack)
+            {
+                data.Type = LogDataType.LogicalOperationStack;
+                data.Data = string.Join(Environment.NewLine, Trace.CorrelationManager.LogicalOperationStack);
+            }
+            else
+            {
+                data.Type = LogDataType.Json;
+                data.Data = JsonConvert.SerializeObject(obj);
+            }
+
+            return data;
+        }
+
         private static void RenumberEvents(LogEntry[] events)
         {
             var id = 0;
+
             foreach (var e in events)
-                e.Id = id++;
+            {
+                e.Id = id;
+
+                if (e.HasData)
+                    foreach (var d in e.Data)
+                        d.EntryId = id;
+
+                id++;
+            }
         }
 
         private static string GetDefaultApplicationName()
