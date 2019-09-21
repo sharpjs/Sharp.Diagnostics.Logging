@@ -36,12 +36,4 @@ https://github.com/sharpjs/Sharp.Diagnostics.Logging/releases
     <PackageOutputPath>..\dist\</PackageOutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
-    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="!$(TargetFramework.StartsWith('netstandard'))">
-    <DefineConstants>$(DefineConstants);NETFX</DefineConstants>
-  </PropertyGroup>
-
 </Project>
