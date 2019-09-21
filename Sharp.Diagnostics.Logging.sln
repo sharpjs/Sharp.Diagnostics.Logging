@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharp.Diagnostics.Logging",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharp.Diagnostics.Logging.Tests", "Sharp.Diagnostics.Logging.Tests\Sharp.Diagnostics.Logging.Tests.csproj", "{6C790C3A-5E7C-4251-80C1-A983E9679ADE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Diagnostics.Logging.Sql", "Sharp.Diagnostics.Logging.Sql\Sharp.Diagnostics.Logging.Sql.csproj", "{4B0F9FB2-2F23-447C-910E-5F179442816C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{6C790C3A-5E7C-4251-80C1-A983E9679ADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C790C3A-5E7C-4251-80C1-A983E9679ADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C790C3A-5E7C-4251-80C1-A983E9679ADE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B0F9FB2-2F23-447C-910E-5F179442816C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B0F9FB2-2F23-447C-910E-5F179442816C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B0F9FB2-2F23-447C-910E-5F179442816C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B0F9FB2-2F23-447C-910E-5F179442816C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
