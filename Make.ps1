@@ -48,11 +48,13 @@ Set-StrictMode -Version Latest
 $Command = $PSCmdlet.ParameterSetName
 if ($Command -eq "Test") { $Test = $true }
 
+$AssemblyNameRoot = "Sharp.Diagnostics.Logging"
+
 function Main {
     Invoke-Build
 
     if ($Test -or $Coverage) {
-        Set-Location -LiteralPath Sharp.Diagnostics.Logging.Tests
+        Set-Location -LiteralPath "$AssemblyNameRoot.Tests"
         Invoke-TestForTargetFramework net472
         Invoke-TestForTargetFramework netcoreapp2.1
     }
@@ -75,7 +77,7 @@ function Invoke-TestForTargetFramework {
             "dotcover"
                 "--dcReportType=HTML"
                 "--dcOutput=..\coverage\$TargetFramework.html"
-                "--dcFilters=+:Sharp.Diagnostics.Logging"
+                "--dcFilters=+:$AssemblyNameRoot`;+:$AssemblyNameRoot.*`;-:*.Tests"
                 "--dcAttributeFilters=System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute"
         }
         "test"
