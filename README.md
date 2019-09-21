@@ -10,13 +10,13 @@ Requirements:
 
 ```powershell
 # The default: build and run tests
-Make.ps1 [-Test] [-Configuration <String>]
+.\Make.ps1 [-Test] [-Configuration <String>]
 
 # Just build; don't run tests
-Make.ps1 -Build [-Configuration <String>]
+.\Make.ps1 -Build [-Configuration <String>]
 
 # Build and run tests w/coverage
-Make.ps1 -Coverage [-Configuration <String>]
+.\Make.ps1 -Coverage [-Configuration <String>]
 ```
 
 ## Status
