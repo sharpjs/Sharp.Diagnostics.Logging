@@ -29,7 +29,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition="!$(TargetFramework.StartsWith('netstandard'))">
-    <Reference Include="System.Configuration"/>
+    <Reference Include="System.Configuration" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
