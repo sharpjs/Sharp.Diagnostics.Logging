@@ -74,22 +74,15 @@ namespace Sharp.Diagnostics.Logging.Sql
 
         public abstract class Field
         {
-            private readonly string _name;
-            private readonly string _dbType;
-
             protected Field(string name, string dbType)
             {
-                if (name == null)
-                    throw new ArgumentNullException(nameof(name));
-                if (dbType == null)
-                    throw new ArgumentNullException(nameof(dbType));
-
-                _name   = name;
-                _dbType = dbType;
+                Name   = name   ?? throw new ArgumentNullException(nameof(name));
+                DbType = dbType ?? throw new ArgumentNullException(nameof(dbType));
             }
 
-            public string Name   => _name;
-            public string DbType => _dbType;
+            public string Name { get; }
+
+            public string DbType { get; }
 
             public abstract Type NetType { get; }
 
@@ -100,21 +93,28 @@ namespace Sharp.Diagnostics.Logging.Sql
 
             public TValue GetValueAs<TValue>(T obj)
             {
-                var typed = this as Field<TValue>;
-                var ok    = typed != null;
-                return ok
-                    ? typed.GetValue(obj)
-                    : (TValue) GetValueAsObject(obj);
+                if (this is Field<TValue> typed)
+                    return typed.GetValue(obj);
+
+                throw new NotSupportedException(string.Format(
+                    "Cannot get field {0} value as type {1}.  " +
+                    "The value must be accessed as type {2}.",
+                    Name, typeof(TValue), NetType
+                ));
             }
 
             public bool TryGetValueAs<TValue>(T obj, out TValue value)
             {
-                var typed = this as Field<TValue>;
-                var ok    = typed != null;
-                value     = ok
-                    ? typed.GetValue(obj)
-                    : default(TValue);
-                return ok;
+                if (this is Field<TValue> typed)
+                {
+                    value = typed.GetValue(obj);
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
             }
 
             protected abstract object GetValueAsObject(T obj);
@@ -127,23 +127,17 @@ namespace Sharp.Diagnostics.Logging.Sql
             public Field(string name, string dbType, Func<T, TValue> getter)
                 : base(name, dbType)
             {
-                if (getter == null)
-                    throw new ArgumentNullException(nameof(getter));
-
-                _getter = getter;
+                _getter = getter ?? throw new ArgumentNullException(nameof(getter));
             }
 
-            public override Type NetType => typeof(TValue);
+            public override Type NetType
+                => typeof(TValue);
 
             public new TValue GetValue(T obj)
-            {
-                return _getter(obj);
-            }
+                => _getter(obj);
 
             protected override object GetValueAsObject(T obj)
-            {
-                return _getter(obj);
-            }
+                => _getter(obj);
         }
     }
 }
