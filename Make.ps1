@@ -79,6 +79,7 @@ function Invoke-TestForTargetFramework {
                 "--dcOutput=..\coverage\$TargetFramework.html"
                 "--dcFilters=+:$AssemblyNameRoot`;+:$AssemblyNameRoot.*`;-:*.Tests"
                 "--dcAttributeFilters=System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute"
+                "--dcHideAutoProperties"
         }
         "test"
             "--framework:$TargetFramework"
