@@ -1,0 +1,19 @@
+<Project>
+
+  <ItemGroup Condition="!$(TargetFramework.StartsWith('netstandard'))">
+    <PackageReference Include="InheritDoc" Version="[2.2.1]">
+      <ExcludeAssets>all</ExcludeAssets>
+      <NoWarn>NU1701</NoWarn>
+    </PackageReference>
+  </ItemGroup>
+
+  <Target
+    Name="InheritDoc"
+    AfterTargets="CopyFilesToOutputDirectory"
+    Condition="'$(_DocumentationFileProduced)'=='true'">
+    <Exec
+      Command="$(NuGetPackageRoot)inheritdoc\2.2.1\tools\InheritDoc.exe -o"
+      WorkingDirectory="$(OutDir)" />
+  </Target>
+
+</Project>

@@ -28,19 +28,6 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <ItemGroup Condition="!$(TargetFramework.StartsWith('netstandard'))">
-    <PackageReference Include="InheritDoc" Version="[2.0.0]">
-      <ExcludeAssets>all</ExcludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <Target
-    Name="InheritDoc"
-    AfterTargets="CopyFilesToOutputDirectory"
-    Condition="'$(_DocumentationFileProduced)'=='true'">
-    <Exec
-      Command="$(NuGetPackageRoot)inheritdoc\2.0.0\tools\InheritDoc.exe -o"
-      WorkingDirectory="$(OutDir)" />
-  </Target>
+  <Import Project="..\InheritDoc.targets" />
 
 </Project>
