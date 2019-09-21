@@ -21,7 +21,7 @@
     <Version>1.0.0-local</Version>
     <Authors>Jeffrey Sharp</Authors>
     <Copyright>Copyright 2019 Jeffrey Sharp</Copyright>
-    <PackageLicenseUrl>https://github.com/sharpjs/Sharp.Diagnostics.Logging/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseExpression>ISC</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/sharpjs/Sharp.Diagnostics.Logging</PackageProjectUrl>
     <PackageTags>Log Logger Logging Trace TraceSource Diagnostics</PackageTags>
     <PackageReleaseNotes>Release notes are available at:
