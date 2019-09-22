@@ -29,7 +29,7 @@ namespace Sharp.Diagnostics.Logging.Sql
     ///   A background worker that periodically flushes a queue of log entries
     ///   to a database hosted in SQL Server or Azure SQL Database.
     /// </summary>
-    public class SqlLogWriter : SD.Disposable
+    public class SqlLogWriter : SD.Disposable, ILogWriter
     {
         private const int
             MaxMessageLength      = 1024,
