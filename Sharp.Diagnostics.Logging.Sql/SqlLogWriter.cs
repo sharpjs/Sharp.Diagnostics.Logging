@@ -23,16 +23,13 @@ using System.Linq;
 using System.Threading;
 using SD = Sharp.Disposable;
 
-// Temporarily
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-
 namespace Sharp.Diagnostics.Logging.Sql
 {
     /// <summary>
     ///   A background worker that periodically flushes a queue of log entries
     ///   to a database hosted in SQL Server or Azure SQL Database.
     /// </summary>
-    internal class SqlLogWriter : SD.Disposable
+    public class SqlLogWriter : SD.Disposable
     {
         private const int
             MaxMessageLength      = 1024,
@@ -49,12 +46,6 @@ namespace Sharp.Diagnostics.Logging.Sql
         private SqlConnection _connection;
         private DateTime      _flushTime;
         private bool          _exiting;
-
-        // Configurables
-        public TimeSpan AutoflushWait      { get; set; } = TimeSpan.FromSeconds ( 5);
-        public TimeSpan CloseWait          { get; set; } = TimeSpan.FromSeconds (10);
-        public TimeSpan RetryWaitIncrement { get; set; } = TimeSpan.FromMinutes ( 5);
-        public TimeSpan RetryWaitMax       { get; set; } = TimeSpan.FromHours   ( 1);
 
         /// <summary>
         ///   Initializes a new <see cref="SqlLogWriter"/> instance with the
@@ -75,6 +66,27 @@ namespace Sharp.Diagnostics.Logging.Sql
 
             _flushThread.Start();
         }
+
+        // Configurables
+        /// <summary>
+        /// 
+        /// </summary>
+        public TimeSpan AutoflushWait { get; set; } = TimeSpan.FromSeconds(5);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public TimeSpan CloseWait { get; set; } = TimeSpan.FromSeconds(10);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public TimeSpan RetryWaitIncrement { get; set; } = TimeSpan.FromMinutes(5);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public TimeSpan RetryWaitMax { get; set; } = TimeSpan.FromHours(1);
 
         private SqlCommand CreateFlushCommand()
         {
@@ -271,11 +283,21 @@ namespace Sharp.Diagnostics.Logging.Sql
             Thread.Sleep(duration);
         }
 
+        /// <summary>
+        ///   Causes queued entries to be written to the database immediately
+        ///   instead of at the next scheduled autoflush.
+        /// </summary>
         public void Flush()
         {
             _flushEvent.Set();
         }
 
+        /// <summary>
+        ///   Enqueues the specified entry to be written to the database.
+        /// </summary>
+        /// <param name="entry">
+        ///   The entry to write to the database.
+        /// </param>
         public void Enqueue(LogEntry entry)
         {
             if (entry is null)
