@@ -121,11 +121,16 @@ namespace Sharp.Diagnostics.Logging.Sql
             Writer = SqlLogWriter.WithConnectionString(connectionString);
         }
 #endif
+        // For testing
+        internal SqlTraceListener(ILogWriter writer)
+        {
+            Writer = writer;
+        }
 
         /// <summary>
         ///   Gets the log writer used by the trace listener.
         /// </summary>
-        public SqlLogWriter Writer { get; }
+        public ILogWriter Writer { get; }
 
         /// <summary>
         ///   Gets or sets the name of the application.  This value populates
