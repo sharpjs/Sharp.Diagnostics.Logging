@@ -325,6 +325,9 @@ namespace Sharp.Diagnostics.Logging.Sql
         /// <param name="entry">
         ///   The entry to write to the database.
         /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="entry"/> is <c>null</c>.
+        /// </exception>
         public void Enqueue(LogEntry entry)
         {
             if (entry is null)
