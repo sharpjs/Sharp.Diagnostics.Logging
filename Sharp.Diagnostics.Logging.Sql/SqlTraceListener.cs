@@ -35,9 +35,6 @@ namespace Sharp.Diagnostics.Logging.Sql
     /// </summary>
     public class SqlTraceListener : TraceListener
     {
-        private const int
-            MaxMessageLength = 1024;
-
         private static readonly TraceSource TraceSource
             = new TraceSource("SqlTraceListener");
 
@@ -237,8 +234,6 @@ namespace Sharp.Diagnostics.Logging.Sql
         private void TraceEventCore(TraceEventCache e, string source, TraceEventType type, int id, string message)
         {
             var entry = CreateEntry(e, source, type, id);
-
-            entry.Message = Truncate(message, MaxMessageLength);
 
             Writer.Enqueue(entry);
         }
