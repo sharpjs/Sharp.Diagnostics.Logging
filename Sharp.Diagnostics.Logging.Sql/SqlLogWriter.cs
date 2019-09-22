@@ -67,24 +67,27 @@ namespace Sharp.Diagnostics.Logging.Sql
             _flushThread.Start();
         }
 
-        // Configurables
         /// <summary>
-        /// 
+        ///   Gets or sets the duration between automatic flushes.
+        ///   The default is 5 seconds.
         /// </summary>
         public TimeSpan AutoflushWait { get; set; } = TimeSpan.FromSeconds(5);
 
         /// <summary>
-        /// 
+        ///   Gets or sets the maximum duration allowed for the final flush
+        ///   during a graceful close.  The default is 10 seconds.
         /// </summary>
         public TimeSpan CloseWait { get; set; } = TimeSpan.FromSeconds(10);
 
         /// <summary>
-        /// 
+        ///   Gets or sets the additional duration to wait before retrying
+        ///   after each repeated flush failure.  The default is 2 minutes.
         /// </summary>
-        public TimeSpan RetryWaitIncrement { get; set; } = TimeSpan.FromMinutes(5);
+        public TimeSpan RetryWaitIncrement { get; set; } = TimeSpan.FromMinutes(2);
 
         /// <summary>
-        /// 
+        ///   Gets or sets the maximum duration to wait before retrying after a
+        ///   flush failure.  The default is 1 hour.
         /// </summary>
         public TimeSpan RetryWaitMax { get; set; } = TimeSpan.FromHours(1);
 
