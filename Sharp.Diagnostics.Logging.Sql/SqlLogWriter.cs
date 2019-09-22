@@ -35,6 +35,14 @@ namespace Sharp.Diagnostics.Logging.Sql
             MaxMessageLength      = 1024,
             CommandTimeoutSeconds = 3 * 60; // 3 minutes
 
+        // Set by runtime
+        private static readonly ConcurrentDictionary<string, SqlLogWriter>
+            Instances = new ConcurrentDictionary<string, SqlLogWriter>(
+                concurrencyLevel: 1,
+                capacity:         3,
+                comparer:         StringComparer.InvariantCultureIgnoreCase
+            );
+
         // Set by constructor
         private readonly ConcurrentQueue<LogEntry> _queue;
         private readonly AutoResetEvent            _flushEvent;
@@ -54,7 +62,7 @@ namespace Sharp.Diagnostics.Logging.Sql
         /// <param name="connectionString">
         ///   The connection string for the log database.
         /// </param>
-        public SqlLogWriter(string connectionString)
+        private SqlLogWriter(string connectionString)
         {
             _connectionString = connectionString
                 ?? throw new ArgumentNullException(nameof(connectionString));
@@ -90,6 +98,22 @@ namespace Sharp.Diagnostics.Logging.Sql
         ///   flush failure.  The default is 1 hour.
         /// </summary>
         public TimeSpan RetryWaitMax { get; set; } = TimeSpan.FromHours(1);
+
+        /// <summary>
+        ///   Gets the shared <see cref="SqlLogWriter"/> instance with the
+        ///   specified connection string.  The instance is created if it does
+        ///   not exist.
+        /// </summary>
+        /// <param name="connectionString">
+        ///   The connection string that the log writer should use.
+        /// </param>
+        /// <returns>
+        ///   The shared log writer with <paramref name="connectionString"/>.
+        /// </returns>
+        public static SqlLogWriter WithConnectionString(string connectionString)
+        {
+            return Instances.GetOrAdd(connectionString, cs => new SqlLogWriter(cs));
+        }
 
         private SqlCommand CreateFlushCommand()
         {
