@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Sharp.Data;
 
 namespace Sharp.Diagnostics.Logging.Sql
 {

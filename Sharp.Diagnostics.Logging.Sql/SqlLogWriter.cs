@@ -21,6 +21,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using Sharp.Data;
 using SD = Sharp.Disposable;
 
 namespace Sharp.Diagnostics.Logging.Sql

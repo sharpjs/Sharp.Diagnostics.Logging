@@ -21,7 +21,7 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 
-namespace Sharp.Diagnostics.Logging.Sql
+namespace Sharp.Data
 {
     internal class ObjectDataReader<T> : DbDataReader
     {

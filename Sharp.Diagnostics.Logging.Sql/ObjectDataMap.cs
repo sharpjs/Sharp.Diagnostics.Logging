@@ -18,7 +18,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Sharp.Diagnostics.Logging.Sql
+namespace Sharp.Data
 {
     internal class ObjectDataMap<T> : IEnumerable<ObjectDataMap<T>.Field>
     {

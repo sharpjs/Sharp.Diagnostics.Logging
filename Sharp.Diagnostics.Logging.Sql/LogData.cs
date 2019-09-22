@@ -14,6 +14,8 @@
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
+using Sharp.Data;
+
 namespace Sharp.Diagnostics.Logging.Sql
 {
     /// <summary>
