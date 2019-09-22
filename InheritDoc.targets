@@ -17,7 +17,7 @@
   -->
 
   <ItemGroup Condition="!$(TargetFramework.StartsWith('netstandard'))">
-    <PackageReference Include="InheritDoc" Version="[2.2.1]">
+    <PackageReference Include="InheritDoc" Version="[2.3.0]">
       <ExcludeAssets>all</ExcludeAssets>
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
@@ -28,7 +28,7 @@
     AfterTargets="CopyFilesToOutputDirectory"
     Condition="'$(_DocumentationFileProduced)'=='true'">
     <Exec
-      Command="$(NuGetPackageRoot)inheritdoc\2.2.1\tools\InheritDoc.exe -o"
+      Command="$(NuGetPackageRoot)inheritdoc\2.3.0\tools\InheritDoc.exe -o"
       WorkingDirectory="$(OutDir)" />
   </Target>
 
