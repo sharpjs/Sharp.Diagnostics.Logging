@@ -16,11 +16,26 @@
 
 namespace Sharp.Diagnostics.Logging.Sql
 {
-    internal class LogData
+    /// <summary>
+    ///   Arbitrary textual data associated with a <see cref="LogEntry"/>
+    ///   object.
+    /// </summary>
+    public class LogData
     {
-        public int         EntryId { get; set; }
-        public LogDataType Type    { get; set; }
-        public string      Data    { get; set; }
+        // Association with LogEvent
+        internal int EntryId { get; set; }
+
+        /// <summary>
+        ///   Gets or sets a value that describes the format of the
+        ///   <see cref="Data"/> property value.
+        /// </summary>
+        public LogDataType Type { get; set; }
+
+        /// <summary>
+        ///   Arbitrary textual data in the format described by the
+        ///   <see cref="Type"/> property value.
+        /// </summary>
+        public string Data { get; set; }
 
         internal static ObjectDataMap<LogData> Map { get; }
             = new ObjectDataMap<LogData>

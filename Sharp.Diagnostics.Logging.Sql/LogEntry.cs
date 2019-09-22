@@ -20,28 +20,93 @@ using System.Diagnostics;
 
 namespace Sharp.Diagnostics.Logging.Sql
 {
-    internal class LogEntry
+    /// <summary>
+    ///   An entry in a log.
+    /// </summary>
+    public class LogEntry
     {
-        public int            Id   { get; set; }
-        public DateTime       Date { get; set; }
+        internal int Id { get; set; }
+
+        /// <summary>
+        ///   Gets or sets the date of the log entry.
+        /// </summary>
+        public DateTime Date { get; set; }
+
+        /// <summary>
+        ///   Gets or sets the type of the log entry.
+        /// </summary>
         public TraceEventType Type { get; set; }
 
+        /// <summary>
+        ///   Gets or sets the name of the application that produced the log
+        ///   entry.
+        /// </summary>
         public string Application { get; set; }
+
+        /// <summary>
+        ///   Gets or sets the name of the application environment that
+        ///   produced the log entry.
+        /// </summary>
         public string Environment { get; set; }
-        public string Component   { get; set; }
-        public string Machine     { get; set; }
-        public string Source      { get; set; }
-        public int?   ProcessId   { get; set; }
-        public int?   ThreadId    { get; set; }
-        public Guid?  ActivityId  { get; set; }
-        public int    MessageId   { get; set; }
-        public string Message     { get; set; }
+
+        /// <summary>
+        ///   Gets or sets the name of the application component that produced
+        ///   the log entry.
+        /// </summary>
+        public string Component { get; set; }
+
+        /// <summary>
+        ///   Gets or sets the name of the machine that produced the log entry.
+        /// </summary>
+        public string Machine { get; set; }
+
+        /// <summary>
+        ///   Gets or sets an arbitrary source name.
+        /// </summary>
+        public string Source { get; set; }
+
+        /// <summary>
+        ///   Gets or sets the id of the operating system process that produced
+        ///   the log entry.
+        /// </summary>
+        public int? ProcessId { get; set; }
+
+        /// <summary>
+        ///   Gets or sets the id of the managed thread that produced the log
+        ///   entry.
+        /// </summary>
+        public int? ThreadId { get; set; }
+
+        /// <summary>
+        ///   Gets or sets the id of the logical activity that produced the log
+        ///   entry.
+        /// </summary>
+        public Guid? ActivityId { get; set; }
+
+        /// <summary>
+        ///   Gets or sets the id of the message of the log entry.
+        /// </summary>
+        public int MessageId { get; set; }
+
+        /// <summary>
+        ///   Gets or sets the message of the log entry.
+        ///   Values are limited to 1024 characters.
+        /// </summary>
+        public string Message { get; set; }
 
         private IList<LogData> _data;
 
+        /// <summary>
+        ///   Gets a value indicating whether any arbitrary textual data is
+        ///   associated with the log entry via the <see cref="Data"/> property.
+        /// </summary>
         public bool HasData
             => _data?.Count > 0;
 
+        /// <summary>
+        ///   Gets a collection of arbitrary textual data associated with the
+        ///   log entry.
+        /// </summary>
         public IList<LogData> Data
             => _data ?? (_data = new List<LogData>());
 

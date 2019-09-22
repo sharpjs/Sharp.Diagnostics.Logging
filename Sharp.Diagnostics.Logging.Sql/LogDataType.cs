@@ -16,11 +16,29 @@
 
 namespace Sharp.Diagnostics.Logging.Sql
 {
-    internal enum LogDataType
+    /// <summary>
+    ///   Describes the format of data in a <see cref="LogData"/> object.
+    /// </summary>
+    public enum LogDataType
     {
+        /// <summary>
+        ///   Generic textual data.
+        /// </summary>
         Text,
+
+        /// <summary>
+        ///   An object graph serialized to JSON.
+        /// </summary>
         Json,
+
+        /// <summary>
+        ///   A call stack.
+        /// </summary>
         CallStack,
+
+        /// <summary>
+        ///   A logical operation stack.
+        /// </summary>
         LogicalOperationStack
     }
 }
