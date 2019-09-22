@@ -15,260 +15,164 @@
 */
 
 using System;
-using System.Collections;
-using System.Collections.Concurrent;
-//using System.Configuration;
-using System.Data;
-//using System.Data.Common;
-using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading;
 using Newtonsoft.Json;
 
-// Temporarily
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+#if NETFRAMEWORK
+using System.Configuration;
+#endif
+
+#if NETSTANDARD
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
+#endif
 
 namespace Sharp.Diagnostics.Logging.Sql
 {
+    /// <summary>
+    ///   A trace listener that writes trace events to a log database hosted in
+    ///   SQL Server or Azure SQL Database.
+    /// </summary>
     public class SqlTraceListener : TraceListener
     {
         private const int
-            MaxMessageLength      = 1024,
-            CommandTimeoutSeconds = 3 * 60; // 3 minutes
-
-        private const string
-            ApplicationNameKey = "SqlTraceListener.Application",
-            EnvironmentNameKey = "SqlTraceListener.Environment",
-            ComponentNameKey   = "SqlTraceListener.Component";
+            MaxMessageLength = 1024;
 
         private static readonly TraceSource TraceSource
             = new TraceSource("SqlTraceListener");
 
-        public string ApplicationName { get; set; }
-        public string EnvironmentName { get; set; }
-        public string ComponentName   { get; set; }
-
-        public TimeSpan AutoflushWait      { get; set; } = TimeSpan.FromSeconds ( 5);
-        public TimeSpan CloseWait          { get; set; } = TimeSpan.FromSeconds (10);
-        public TimeSpan RetryWaitIncrement { get; set; } = TimeSpan.FromMinutes ( 5);
-        public TimeSpan RetryWaitMax       { get; set; } = TimeSpan.FromHours   ( 1);
-
-        private readonly string                    _connectionString;
-        private readonly ConcurrentQueue<LogEntry> _queue;
-        private readonly AutoResetEvent            _flushEvent;
-        private readonly Thread                    _flushThread;
-        private readonly SqlCommand                _command;
-
-        // Used by flush thread
-        private SqlConnection _connection;
-        private DateTime      _flushTime;
-        private bool          _exiting;
-
+#if NETFRAMEWORK
+        /// <summary>
+        ///   Initializes a new <see cref="SqlTraceListener"/> instance with
+        ///   the specified connection string name.
+        /// </summary>
+        /// <param name="connectionStringName">
+        ///   The name of the connection string for the log database.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="connectionStringName"/> is <c>null</c>.
+        /// </exception>
         public SqlTraceListener(string connectionStringName)
         {
-            if (connectionStringName == null)
+            const string
+                KeyPrefix          = "SqlTraceListener.",
+                ApplicationNameKey = KeyPrefix + nameof(LogEntry.Application),
+                EnvironmentNameKey = KeyPrefix + nameof(LogEntry.Environment),
+                ComponentNameKey   = KeyPrefix + nameof(LogEntry.Component);
+
+            if (connectionStringName is null)
                 throw new ArgumentNullException(nameof(connectionStringName));
 
-            //// Read app settings
-            //var config      = ConfigurationManager.AppSettings;
-            //ApplicationName = config[ApplicationNameKey] ?? GetDefaultApplicationName();
-            //EnvironmentName = config[EnvironmentNameKey] ?? "Default";
-            //ComponentName   = config[ComponentNameKey  ] ?? "Default";
-
             // Read connection string
-            _connectionString = GetConnectionString(connectionStringName);
+            var connectionString = ConfigurationManager.ConnectionStrings[connectionStringName]
+                ?? throw new ConfigurationErrorsException(string.Format(
+                    "A connection string named '{0}' was not found.",
+                    connectionStringName
+                ));
 
-            // Initialize event queue
-            _queue = new ConcurrentQueue<LogEntry>();
+            // Read app settings
+            var section     = ConfigurationManager.AppSettings;
+            ApplicationName = section[ApplicationNameKey] ?? GetDefaultApplicationName();
+            EnvironmentName = section[EnvironmentNameKey] ?? "Default";
+            ComponentName   = section[ComponentNameKey  ] ?? "Default";
 
-            // Prepare flush command
-            _command = new SqlCommand()
-            {
-                CommandType    = CommandType.StoredProcedure,
-                CommandText    = "WriteLog",
-                CommandTimeout = CommandTimeoutSeconds
-            };
-            var parameter = _command.Parameters.Add("@EntryRows", SqlDbType.Structured);
-            parameter.TypeName = "dbo.LogEntryRow";
-
-            // Start flush thread
-            _flushEvent  = new AutoResetEvent(initialState: false);
-            _flushThread = new Thread(FlushThreadMain)
-            {
-                Name         = "SqlTraceListener.Flush",
-                Priority     = ThreadPriority.AboveNormal,
-                IsBackground = true, // don't prevent app from exiting
-            };
-            _flushThread.Start();
+            Writer = SqlLogWriter.WithConnectionString(connectionString.ConnectionString);
         }
-
-        private static string GetConnectionString(string name)
+#endif
+#if NETSTANDARD
+        /// <summary>
+        ///   Initializes a new <see cref="SqlTraceListener"/> instance with
+        ///   the specified connection string name and configuration.
+        /// </summary>
+        /// <param name="connectionStringName">
+        ///   The name of the connection string for the log database.
+        /// </param>
+        /// <param name="configuration">
+        ///   The application configuration to use.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="connectionStringName"/> is <c>null</c>, or
+        ///   <paramref name="configuration"/>        is <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///   <paramref name="connectionStringName"/> is empty.
+        /// </exception>
+        /// <exception cref="KeyNotFoundException">
+        ///   A connection string with name
+        ///   <paramref name="connectionStringName"/> was not found.
+        /// </exception>
+        public SqlTraceListener(string connectionStringName, IConfiguration configuration)
         {
-            //var item = ConfigurationManager.ConnectionStrings[name];
-            //if (item != null)
-            //    return item.ConnectionString;
+            if (connectionStringName is null)
+                throw new ArgumentNullException(nameof(connectionStringName));
+            if (connectionStringName.Length == 0)
+                throw new ArgumentException("Argument cannot be empty.", nameof(connectionStringName));
+            if (configuration is null)
+                throw new ArgumentNullException(nameof(configuration));
 
-            throw new /*ConfigurationErrorsException*/ Exception(string.Format(
-                "A connection string named '{0}' was not found.",
-                name
-            ));
+            var connectionString = configuration.GetConnectionString(connectionStringName)
+                ?? throw new KeyNotFoundException(string.Format(
+                    "The configuration value with key 'ConnectionStrings:{0}' was not found.",
+                    connectionStringName
+                ));
+
+            var section     = configuration.GetSection(nameof(SqlTraceListener));
+            ApplicationName = section[nameof(LogEntry.Application)] ?? GetDefaultApplicationName();
+            EnvironmentName = section[nameof(LogEntry.Environment)] ?? "Default";
+            ComponentName   = section[nameof(LogEntry.Component  )] ?? "Default";
+
+            Writer = SqlLogWriter.WithConnectionString(connectionString);
         }
+#endif
 
-        public override void Close()
-        {
-            Dispose();
-        }
+        /// <summary>
+        ///   Gets the log writer used by the trace listener.
+        /// </summary>
+        public SqlLogWriter Writer { get; }
 
-        protected override void Dispose(bool managed)
-        {
-            if (managed && !_exiting)
-            {
-                // Tell flusher thread to flush and exit
-                _exiting = true;
-                _flushEvent.Set();
+        /// <summary>
+        ///   Gets or sets the name of the application.  This value populates
+        ///   the <see cref="LogEntry.Application"/> property.
+        /// </summary>
+        public string ApplicationName { get; set; }
 
-                // Give flusher thread a fair chance to flush
-                if (!_flushThread.Join(CloseWait))
-                    _flushThread.Abort();
+        /// <summary>
+        ///   Gets or sets the name of the application.  This value populates
+        ///   the <see cref="LogEntry.Environment"/> property.
+        /// </summary>
+        public string EnvironmentName { get; set; }
 
-                // Dispose managed objects
-                _flushEvent.Dispose();
-                _command.Dispose();
-            }
+        /// <summary>
+        ///   Gets or sets the name of the application.  This value populates
+        ///   the <see cref="LogEntry.Component"/> property.
+        /// </summary>
+        public string ComponentName { get; set; }
 
-            base.Dispose(managed);
-        }
-
-        private void FlushThreadMain()
-        {
-            ScheduleAutoflush();
-
-            for (var retries = 0;;)
-            {
-                try
-                {
-                    if (_exiting)
-                        return;
-
-                    WaitBeforeFlush();
-                    FlushCore();
-
-                    retries = 0;
-                }
-                catch (Exception e)
-                {
-                    OnException(e);
-                    WaitBeforeRetry(retries);
-
-                    if (retries < int.MaxValue)
-                        retries++;
-                }
-            }
-        }
-
-        private void ScheduleAutoflush()
-        {
-            _flushTime = DateTime.UtcNow + AutoflushWait;
-        }
-
-        private void WaitBeforeFlush()
-        {
-            // Compute time remaining until autoflush
-            var duration = _flushTime - DateTime.UtcNow;
-
-            // Wait until autoflush time, or until Flush() called
-            if (duration > TimeSpan.Zero)
-                _flushEvent.WaitOne(duration);
-
-            // Compute time of next autoflush
-            ScheduleAutoflush();
-        }
-
-        private void FlushCore()
-        {
-            // Avoid flushing an empty queue
-            var queue = _queue;
-            if (queue.IsEmpty)
-                return;
-
-            // Take a snapshot of the pending events at this time
-            var events = queue.ToArray();
-            var count  = events.Length;
-
-            // Prepare queue snapshot for transmission
-            RenumberEvents(events);
-
-            // Ensure good connection to the server
-            var connection = _connection;
-            if (connection != null && connection.State != ConnectionState.Open)
-            {
-                connection.Dispose();
-                connection = null;
-            }
-            if (connection == null)
-            {
-                connection          = new SqlConnection(_connectionString); //.Logged();
-                //DisposalTracker<DbConnection>.Instance.Track(connection);
-                _connection         = connection;
-                _command.Connection = connection;
-                connection.Open();
-            }
-
-            var data = events
-                .Where      (e => e.HasData)
-                .SelectMany (e => e.Data);
-
-            // Transmit the events to the server
-            _command.Parameters[0].Value = new ObjectDataReader<LogEntry>(events, LogEntry.Map);
-            _command.Parameters[1].Value = new ObjectDataReader<LogData> (data,   LogData .Map);
-            _command.ExecuteNonQuery();
-
-            // Remove the events from the queue
-            for (; count > 0; count--)
-                queue.TryDequeue(out LogEntry entry);
-        }
-
-        private void OnException(Exception e)
-        {
-            //TraceSource.TraceError(e);
-        }
-
-        private void WaitBeforeRetry(int retries)
-        {
-            // Adaptive delay: nothing for the first retry, then increasing by
-            // regular increments for each successive retry, up to some maximum.
-            // Default: wait 5 minutes longer for each retry, up to 1 hour max.
-
-            var incrementsMax = RetryWaitMax.Ticks / RetryWaitIncrement.Ticks;
-            var increments    = Math.Min((long) retries, incrementsMax);
-            var duration      = new TimeSpan(increments * RetryWaitIncrement.Ticks);
-
-            //TraceSource.TraceWarning("Flush failed; retrying after {0:c}.", duration);
-
-            Thread.Sleep(duration);
-        }
-
+        /// <inheritdoc/>
         public override void Flush()
         {
-            _flushEvent.Set();
+            Writer.Flush();
         }
 
+        /// <inheritdoc/>
         public override void Write(string message)
         {
             TraceEvent(new TraceEventCache(), "", TraceEventType.Information, 0, message);
         }
 
+        /// <inheritdoc/>
         public override void WriteLine(string message)
         {
             TraceEvent(new TraceEventCache(), "", TraceEventType.Information, 0, message);
         }
 
+        /// <inheritdoc/>
         public override void TraceEvent(TraceEventCache e, string source, TraceEventType type, int id)
         {
             TraceEvent(e, source, type, id, "");
         }
 
+        /// <inheritdoc/>
         public override void TraceEvent(TraceEventCache e, string source, TraceEventType type, int id, string message)
         {
             if (!ShouldTrace(e, source, type, id, message))
@@ -277,6 +181,7 @@ namespace Sharp.Diagnostics.Logging.Sql
             TraceEventCore(e, source, type, id, message);
         }
 
+        /// <inheritdoc/>
         public override void TraceEvent(TraceEventCache e, string source, TraceEventType type, int id, string format, params object[] args)
         {
             if (!ShouldTrace(e, source, type, id, format, args))
@@ -288,27 +193,34 @@ namespace Sharp.Diagnostics.Logging.Sql
             );
         }
 
+        /// <inheritdoc/>
         public override void TraceData(TraceEventCache e, string source, TraceEventType type, int id, object obj)
         {
             if (!ShouldTrace(e, source, type, id, obj: obj))
                 return;
 
             var entry = CreateEntry(e, source, type, id);
+
             entry.Data.Add(CreateData(obj));
-            _queue.Enqueue(entry);
+
+            Writer.Enqueue(entry);
         }
 
+        /// <inheritdoc/>
         public override void TraceData(TraceEventCache e, string source, TraceEventType type, int id, params object[] objs)
         {
             if (!ShouldTrace(e, source, type, id, objs: objs))
                 return;
 
             var entry = CreateEntry(e, source, type, id);
+
             foreach (var obj in objs)
                 entry.Data.Add(CreateData(obj));
-            _queue.Enqueue(entry);
+
+            Writer.Enqueue(entry);
         }
 
+        /// <inheritdoc/>
         public override void TraceTransfer(TraceEventCache e, string source, int id, string message, Guid relatedActivityId)
         {
             TraceEvent(e, source, TraceEventType.Transfer, id, "{0} {related:{1}}", message, relatedActivityId.ToString());
@@ -325,8 +237,10 @@ namespace Sharp.Diagnostics.Logging.Sql
         private void TraceEventCore(TraceEventCache e, string source, TraceEventType type, int id, string message)
         {
             var entry = CreateEntry(e, source, type, id);
+
             entry.Message = Truncate(message, MaxMessageLength);
-            _queue.Enqueue(entry);
+
+            Writer.Enqueue(entry);
         }
 
         private LogEntry CreateEntry(TraceEventCache e, string source, TraceEventType type, int id)
@@ -402,5 +316,19 @@ namespace Sharp.Diagnostics.Logging.Sql
 
         private static string Truncate(string s, int length)
             => s.Length <= length ? s : s.Substring(0, length);
+
+        /// <inhertidoc/>
+        public override void Close()
+        {
+            Dispose();
+        }
+
+        /// <inhertidoc/>
+        protected override void Dispose(bool managed)
+        {
+            base.Dispose(managed);
+
+            Writer.Dispose();
+        }
     }
 }
