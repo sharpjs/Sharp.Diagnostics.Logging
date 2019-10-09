@@ -547,12 +547,12 @@ namespace Sharp.Diagnostics.Logging
             }
 
             stackA.Should().HaveCount(1);           // [opA]
-            var a0 = (Guid) stackA[0];
+            var a0 = (string) stackA[0];
             a0.Should().NotBeEmpty();
 
             stackB.Should().HaveCount(2);           // [opB, opA]
-            var b0 = (Guid) stackB[0];
-            var b1 = (Guid) stackB[1];
+            var b0 = (string) stackB[0];
+            var b1 = (string) stackB[1];
             b0.Should().NotBeEmpty().And.NotBe(a0);
             b1.Should().Be(a0);
         }

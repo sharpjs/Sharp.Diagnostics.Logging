@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ using FluentAssertions;
 using FluentAssertions.Extensions;
 using NUnit.Framework;
 using static System.Diagnostics.TraceEventType;
+using static FluentAssertions.FluentActions;
 
 namespace Sharp.Diagnostics.Logging
 {
@@ -86,11 +88,11 @@ namespace Sharp.Diagnostics.Logging
         {
             ExpectTraceOperation("Test");
 
-            var min = DateTime.UtcNow;
+            var min = GetUtcNow();
 
             using (var op = new TraceOperation(Trace, "Test"))
             {
-                var max = DateTime.UtcNow;
+                var max = GetUtcNow();
 
                 var value = op.StartTime;
 
@@ -104,17 +106,17 @@ namespace Sharp.Diagnostics.Logging
         {
             ExpectTraceOperation("Test");
 
-            var before = DateTime.UtcNow;
+            var before = GetUtcNow();
 
             using (var op = new TraceOperation(Trace, "Test"))
             {
-                var after = DateTime.UtcNow;
+                var after = GetUtcNow();
 
                 Thread.Sleep(20.Milliseconds());
 
-                var min   = DateTime.UtcNow - after;
+                var min   = GetUtcNow() - after;
                 var value = op.ElapsedTime;
-                var max   = DateTime.UtcNow - before;
+                var max   = GetUtcNow() - before;
 
                 value.Should().BeGreaterOrEqualTo(min);
                 value.Should().BeLessOrEqualTo   (max);
@@ -144,6 +146,84 @@ namespace Sharp.Diagnostics.Logging
             {
                 op.Exception = e;
                 op.Exception.Should().BeSameAs(e);
+            }
+        }
+
+        [Test]
+        [NonParallelizable] // becuase it depends on static state
+        public void CorrelationIds_W3C()
+        {
+            ExpectTraceOperation("Test");
+
+            var priorFormat = Activity.DefaultIdFormat;
+            var priorForced = Activity.ForceDefaultIdFormat;
+
+            try
+            {
+                Activity.DefaultIdFormat      = ActivityIdFormat.W3C;
+                Activity.ForceDefaultIdFormat = false;
+
+                Activity.Current    .Should().BeNull();
+                LegacyActivityId    .Should().BeEmpty();
+                LegacyOperationStack.Should().BeEmpty();
+
+                using (var op = new TraceOperation(Trace, "Test"))
+                {
+                    Activity.Current              .Should().NotBeNull();
+                    Activity.Current.OperationName.Should().Be(op.Name);
+                    Activity.Current.IdFormat     .Should().Be(ActivityIdFormat.W3C);
+
+                    LegacyActivityId    .Should().Be(Guid.Parse(Activity.Current.TraceId.ToHexString()));
+                    LegacyOperationStack.Should().Equal(new[] { Activity.Current.Id });
+                }
+
+                Activity.Current.Should().BeNull();
+                LegacyActivityId    .Should().BeEmpty();
+                LegacyOperationStack.Should().BeEmpty();
+            }
+            finally
+            {
+                Activity.DefaultIdFormat      = priorFormat;
+                Activity.ForceDefaultIdFormat = priorForced;
+            }
+        }
+
+        [Test]
+        [NonParallelizable] // becuase it depends on static state
+        public void CorrelationIds_Hierarchical()
+        {
+            ExpectTraceOperation("Test");
+
+            var priorFormat = Activity.DefaultIdFormat;
+            var priorForced = Activity.ForceDefaultIdFormat;
+
+            try
+            {
+                Activity.DefaultIdFormat      = ActivityIdFormat.Hierarchical;
+                Activity.ForceDefaultIdFormat = false;
+
+                Activity.Current    .Should().BeNull();
+                LegacyActivityId    .Should().BeEmpty();
+                LegacyOperationStack.Should().BeEmpty();
+
+                using (var op = new TraceOperation(Trace, "Test"))
+                {
+                    Activity.Current              .Should().NotBeNull();
+                    Activity.Current.OperationName.Should().Be(op.Name);
+                    Activity.Current.IdFormat     .Should().Be(ActivityIdFormat.Hierarchical);
+
+                    LegacyActivityId    .Should().NotBeEmpty();
+                    LegacyOperationStack.Should().Equal(new[] { Activity.Current.Id });
+                }
+
+                Activity.Current.Should().BeNull();
+                LegacyActivityId    .Should().BeEmpty();
+                LegacyOperationStack.Should().BeEmpty();
+            }
+            finally
+            {
+                Activity.DefaultIdFormat      = priorFormat;
+                Activity.ForceDefaultIdFormat = priorForced;
             }
         }
 
@@ -390,5 +470,14 @@ namespace Sharp.Diagnostics.Logging
             this.Awaiting(_ => TraceOperation.DoAsync(Trace, "Test", () => Task.FromResult(null as int? ?? throw e)))
                 .Should().Throw<ApplicationException>();
         }
+
+        private static Guid LegacyActivityId
+            => System.Diagnostics.Trace.CorrelationManager.ActivityId;
+
+        private static Stack LegacyOperationStack
+            => System.Diagnostics.Trace.CorrelationManager.LogicalOperationStack;
+
+        private static DateTime GetUtcNow()
+            => TraceOperation.GetUtcNow();
     }
 }

@@ -30,9 +30,7 @@ namespace Sharp.Diagnostics.Logging
     public sealed class TraceOperation : IDisposable
     {
         private readonly TraceSource? _trace;
-        private readonly string?      _name;
-        private readonly DateTime     _start;
-        private Exception?            _exception;
+        private readonly Activity     _activity;
 
         /// <summary>
         ///   Initializes a new <see cref="TraceOperation"/> instance with the
@@ -63,64 +61,78 @@ namespace Sharp.Diagnostics.Logging
         public TraceOperation(TraceSource? trace, [CallerMemberName] string? name = null)
         {
             _trace = trace;
-            _name  = name;
 
-            if (Trace.CorrelationManager.LogicalOperationStack.Count == 0)
-                Trace.CorrelationManager.ActivityId = Guid.NewGuid();
+            _activity = new Activity(name).Start();
 
-            Trace.CorrelationManager.StartLogicalOperation();
+            StartCorrelationManagerOperation(_activity);
 
             TraceStarting();
-
-            _start = DateTime.UtcNow;
         }
 
-        private void Dispose()
+        void IDisposable.Dispose()
         {
+            _activity.Stop();
+
             TraceCompleted();
 
+            StopCorrelationManagerOperation();
+        }
+
+        /// <summary>
+        ///   Gets the name of the operation.
+        /// </summary>
+        public string? Name => _activity.OperationName;
+
+        /// <summary>
+        ///   Gets the UTC time when the operation started.
+        /// </summary>
+        public DateTime StartTime => _activity.StartTimeUtc;
+
+        /// <summary>
+        ///   Gets the duration elapsed since the operation started.
+        /// </summary>
+        public TimeSpan ElapsedTime
+            => _activity.Duration > TimeSpan.Zero
+                ? _activity.Duration
+                : GetUtcNow() - _activity.StartTimeUtc;
+
+        /// <summary>
+        ///   Gets or sets the exception associated with the operation.
+        /// </summary>
+        public Exception? Exception { get; set; }
+
+        private static void StartCorrelationManagerOperation(Activity activity)
+        {
+            if (!TryGetTraceId(activity, out var traceId))
+                traceId = Guid.NewGuid();
+
+            if (Trace.CorrelationManager.LogicalOperationStack.Count == 0)
+                Trace.CorrelationManager.ActivityId = traceId;
+
+            Trace.CorrelationManager.StartLogicalOperation(activity.Id);
+        }
+
+        private static void StopCorrelationManagerOperation()
+        {
             Trace.CorrelationManager.StopLogicalOperation();
 
             if (Trace.CorrelationManager.LogicalOperationStack.Count == 0)
                 Trace.CorrelationManager.ActivityId = Guid.Empty;
         }
 
-        void IDisposable.Dispose()
+        private static bool TryGetTraceId(Activity activity, out Guid traceId)
         {
-            Dispose();
-        }
+            const string HexDigitsFormat = "N";
 
-        /// <summary>
-        ///   Gets the name of the operation.
-        /// </summary>
-        public string? Name
-        {
-            get { return _name; }
-        }
+            if (activity.IdFormat != ActivityIdFormat.W3C)
+            {
+                traceId = default;
+                return false;
+            }
 
-        /// <summary>
-        ///   Gets the UTC time when the operation started.
-        /// </summary>
-        public DateTime StartTime
-        {
-            get { return _start; }
-        }
-
-        /// <summary>
-        ///   Gets the duration elapsed since the operation started.
-        /// </summary>
-        public TimeSpan ElapsedTime
-        {
-            get { return DateTime.UtcNow - _start; }
-        }
-
-        /// <summary>
-        ///   Gets or sets the exception associated with the operation.
-        /// </summary>
-        public Exception? Exception
-        {
-            get { return _exception; }
-            set { _exception = value; }
+            return Guid.TryParseExact(
+                activity.TraceId.ToString(), HexDigitsFormat, out traceId
+            );
         }
 
         /// <summary>
@@ -343,5 +355,22 @@ namespace Sharp.Diagnostics.Logging
             else
                 Trace.TraceInformation("{0}: Completed [{1:N3}s]{2}", name, time, notice);
         }
+
+#if NETFX
+        // HACK: Activity uses some internal magic to get better accuracy than
+        //       DateTime.UtcNow normally delivers.  To have reliable date math
+        //       against Activity, this class must use that same logic.
+        internal static DateTime GetUtcNow()
+        {
+            var a = new Activity(nameof(GetUtcNow));
+            a.Start().Stop();
+            return a.StartTimeUtc;
+        }
+#else
+        internal static DateTime GetUtcNow()
+        {
+            return DateTime.UtcNow;
+        }
+#endif
     }
 }
