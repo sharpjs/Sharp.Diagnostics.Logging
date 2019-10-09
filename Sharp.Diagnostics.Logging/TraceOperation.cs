@@ -35,8 +35,10 @@ namespace Sharp.Diagnostics.Logging
         private Exception?            _exception;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref="TraceOperation"/>
-        ///   class with the specified operation name.
+        ///   Initializes a new <see cref="TraceOperation"/> instance with the
+        ///   specified operation name.  The instance will use the static
+        ///   <see cref="Trace"/> class to log the start and end of the
+        ///   operation.
         /// </summary>
         /// <param name="name">
         ///   The name of the operation.  The default value is the member name
@@ -47,8 +49,8 @@ namespace Sharp.Diagnostics.Logging
             : this(null, name) { }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref="TraceOperation"/>
-        ///   class with the specified trace source and operation name.
+        ///   Initializes a new <see cref="TraceOperation"/> instance with the
+        ///   specified trace source and operation name.
         /// </summary>
         /// <param name="trace">
         ///   The trace source used to log the start and end of the operation.
