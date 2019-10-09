@@ -46,8 +46,10 @@ namespace Sharp.Diagnostics.Logging
 
         #region TraceSource
 
+#pragma warning disable IDE1006 // Naming Styles
         private static readonly TraceSource _trace
             = new TProvider().GetTraceSource();
+#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
         ///   Gets the <c>System.Diagnostics.TraceSource</c> instance to which
