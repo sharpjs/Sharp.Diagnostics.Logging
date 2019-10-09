@@ -24,6 +24,7 @@
     <TargetFrameworks>net48;netcoreapp3.0</TargetFrameworks>
     <RootNamespace>Sharp.Diagnostics.Logging</RootNamespace>
     <DocumentationFile></DocumentationFile>
+    <NoWarn>IDE1006</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
