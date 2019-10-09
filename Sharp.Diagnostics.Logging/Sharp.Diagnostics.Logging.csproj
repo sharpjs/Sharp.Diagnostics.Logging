@@ -32,6 +32,10 @@
     <Compile Include="..\General.cs" Link="Properties\General.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="[4.6.0,5.0.0)" />
+  </ItemGroup>
+
   <Import Project="..\InheritDoc.targets" />
 
 </Project>
