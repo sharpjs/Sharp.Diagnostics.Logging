@@ -8,6 +8,7 @@ Most lines should begin with one of these words:
 
 ## [0.1.0](https://github.com/sharpjs/Sharp.Diagnostics.Logging/compare/v0.0.0...v0.1.0)
 - Add dependency: `System.Diagonstics.DiagnosticSource`
+- Update test targets to .NET Framework 4.8 and .NET Core 3.0
 
 ## [0.0.0](https://github.com/sharpjs/Sharp.Diagnostics.Logging/tree/v0.0.0)
 Initial release.
