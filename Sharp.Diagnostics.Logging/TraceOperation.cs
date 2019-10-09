@@ -19,6 +19,8 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace Sharp.Diagnostics.Logging
 {
     /// <summary>
@@ -27,10 +29,10 @@ namespace Sharp.Diagnostics.Logging
     /// </summary>
     public sealed class TraceOperation : IDisposable
     {
-        private readonly TraceSource _trace;
-        private readonly string      _name;
-        private readonly DateTime    _start;
-        private Exception            _exception;
+        private readonly TraceSource? _trace;
+        private readonly string?      _name;
+        private readonly DateTime     _start;
+        private Exception?            _exception;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref="TraceOperation"/>
@@ -41,7 +43,7 @@ namespace Sharp.Diagnostics.Logging
         ///   of the calling method or property, if the compiler supports
         ///   <c>CallerMemberNameAttribute</c>, and <c>null</c> otherwise.
         /// </param>
-        public TraceOperation([CallerMemberName] string name = null)
+        public TraceOperation([CallerMemberName] string? name = null)
             : this(null, name) { }
 
         /// <summary>
@@ -56,7 +58,7 @@ namespace Sharp.Diagnostics.Logging
         ///   of the calling method or property, if the compiler supports
         ///   <c>CallerMemberNameAttribute</c>, and <c>null</c> otherwise.
         /// </param>
-        public TraceOperation(TraceSource trace, [CallerMemberName] string name = null)
+        public TraceOperation(TraceSource? trace, [CallerMemberName] string? name = null)
         {
             _trace = trace;
             _name  = name;
@@ -89,7 +91,7 @@ namespace Sharp.Diagnostics.Logging
         /// <summary>
         ///   Gets the name of the operation.
         /// </summary>
-        public string Name
+        public string? Name
         {
             get { return _name; }
         }
@@ -113,44 +115,51 @@ namespace Sharp.Diagnostics.Logging
         /// <summary>
         ///   Gets or sets the exception associated with the operation.
         /// </summary>
-        public Exception Exception
+        public Exception? Exception
         {
             get { return _exception; }
             set { _exception = value; }
         }
 
         /// <summary>
-        /// 
+        ///   Runs a logical operation, writing start, stop, and error entries
+        ///   to <see cref="Trace"/>.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
+        /// <param name="name">The name of the operation.</param>
+        /// <param name="action">The operation.</param>
         [DebuggerStepThrough]
-        public static void Do(string name, Action action)
+        public static void Do(string? name, Action action)
         {
             Do(null, name, action);
         }
 
         /// <summary>
-        /// 
+        ///   Runs a logical operation asynchronously, writing start, stop, and
+        ///   error entries to <see cref="Trace"/>.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
+        /// <param name="name">The name of the operation.</param>
+        /// <param name="action">The operation.</param>
         [DebuggerStepThrough]
-        public static Task DoAsync(string name, Func<Task> action)
+        public static Task DoAsync(string? name, Func<Task> action)
         {
             return DoAsync(null, name, action);
         }
 
         /// <summary>
-        /// 
+        ///   Runs a logical operation, writing start, stop, and error entries
+        ///   to the specified trace source.
         /// </summary>
-        /// <param name="trace"></param>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
+        /// <param name="trace">The trace source to which to write.</param>
+        /// <param name="name">The name of the operation.</param>
+        /// <param name="action">The operation.</param>
         [DebuggerStepThrough]
-        public static void Do(TraceSource trace, string name, Action action)
+        public static void Do(TraceSource? trace, string? name, Action action)
         {
-            var operation = new TraceOperation(trace, name);
+            if (action is null)
+                throw new ArgumentNullException(nameof(action));
+
+            using var operation = new TraceOperation(trace, name);
+
             try
             {
                 action();
@@ -160,23 +169,23 @@ namespace Sharp.Diagnostics.Logging
                 operation.Exception = e;
                 throw;
             }
-            finally
-            {
-                operation.Dispose();
-            }
         }
 
         /// <summary>
-        /// 
+        ///   Runs a logical operation asynchronously, writing start, stop, and
+        ///   error entries to the specified trace source.
         /// </summary>
-        /// <param name="trace"></param>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
+        /// <param name="trace">The trace source to which to write.</param>
+        /// <param name="name">The name of the operation.</param>
+        /// <param name="action">The operation.</param>
         [DebuggerStepThrough]
-        public static async Task DoAsync(TraceSource trace, string name, Func<Task> action)
+        public static async Task DoAsync(TraceSource? trace, string? name, Func<Task> action)
         {
-            var operation = new TraceOperation(trace, name);
+            if (action is null)
+                throw new ArgumentNullException(nameof(action));
+
+            using var operation = new TraceOperation(trace, name);
+
             try
             {
                 await action();
@@ -186,50 +195,47 @@ namespace Sharp.Diagnostics.Logging
                 operation.Exception = e;
                 throw;
             }
-            finally
-            {
-                operation.Dispose();
-            }
         }
 
         /// <summary>
-        /// 
+        ///   Runs a logical operation, writing start, stop, and error entries
+        ///   to <see cref="Trace"/>.
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
+        /// <param name="name">The name of the operation.</param>
+        /// <param name="action">The operation.</param>
         [DebuggerStepThrough]
-        public static TResult Do<TResult>(string name, Func<TResult> action)
+        public static TResult Do<TResult>(string? name, Func<TResult> action)
         {
             return Do(null, name, action);
         }
 
         /// <summary>
-        /// 
+        ///   Runs a logical operation asynchronously, writing start, stop, and
+        ///   error entries to <see cref="Trace"/>.
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
+        /// <param name="name">The name of the operation.</param>
+        /// <param name="action">The operation.</param>
         [DebuggerStepThrough]
-        public static Task<TResult> DoAsync<TResult>(string name, Func<Task<TResult>> action)
+        public static Task<TResult> DoAsync<TResult>(string? name, Func<Task<TResult>> action)
         {
             return DoAsync(null, name, action);
         }
 
         /// <summary>
-        /// 
+        ///   Runs a logical operation, writing start, stop, and error entries
+        ///   to the specified trace source.
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="trace"></param>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
+        /// <param name="trace">The trace source to which to write.</param>
+        /// <param name="name">The name of the operation.</param>
+        /// <param name="action">The operation.</param>
         [DebuggerStepThrough]
-        public static TResult Do<TResult>(TraceSource trace, string name, Func<TResult> action)
+        public static TResult Do<TResult>(TraceSource? trace, string? name, Func<TResult> action)
         {
-            var operation = new TraceOperation(trace, name);
+            if (action is null)
+                throw new ArgumentNullException(nameof(action));
+
+            using var operation = new TraceOperation(trace, name);
+
             try
             {
                 return action();
@@ -239,24 +245,23 @@ namespace Sharp.Diagnostics.Logging
                 operation.Exception = e;
                 throw;
             }
-            finally
-            {
-                operation.Dispose();
-            }
         }
 
         /// <summary>
-        /// 
+        ///   Runs a logical operation asynchronously, writing start, stop, and
+        ///   error entries to the specified trace source.
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="trace"></param>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
+        /// <param name="trace">The trace source to which to write.</param>
+        /// <param name="name">The name of the operation.</param>
+        /// <param name="action">The operation.</param>
         [DebuggerStepThrough]
-        public static async Task<TResult> DoAsync<TResult>(TraceSource trace, string name, Func<Task<TResult>> action)
+        public static async Task<TResult> DoAsync<TResult>(TraceSource? trace, string? name, Func<Task<TResult>> action)
         {
-            var operation = new TraceOperation(trace, name);
+            if (action is null)
+                throw new ArgumentNullException(nameof(action));
+
+            using var operation = new TraceOperation(trace, name);
+
             try
             {
                 return await action();
@@ -265,10 +270,6 @@ namespace Sharp.Diagnostics.Logging
             {
                 operation.Exception = e;
                 throw;
-            }
-            finally
-            {
-                operation.Dispose();
             }
         }
 
