@@ -40,6 +40,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sharp.Diagnostics.Logging\Sharp.Diagnostics.Logging.csproj" />
+    <ProjectReference Include="..\Sharp.Diagnostics.Logging.Sql\Sharp.Diagnostics.Logging.Sql.csproj" />
   </ItemGroup>
 
 </Project>

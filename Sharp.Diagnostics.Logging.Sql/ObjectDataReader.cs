@@ -77,10 +77,10 @@ namespace Sharp.Data
             => _map.GetOrdinal(name);
 
         public override bool IsDBNull(int ordinal)
-            => GetValue(ordinal) == null;
+            => GetValue(ordinal) is null;
 
         public override object GetValue(int ordinal)
-            => _map[ordinal].GetValue(_rows.Current);
+            => _map[ordinal].GetValue(_rows.Current) ?? DBNull.Value;
 
         public TValue GetValueAs<TValue>(int ordinal)
             => _map[ordinal].GetValueAs<TValue>(_rows.Current);
