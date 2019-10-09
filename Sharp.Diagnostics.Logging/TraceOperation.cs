@@ -14,12 +14,12 @@
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
+#nullable enable
+
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-
-#nullable enable
 
 namespace Sharp.Diagnostics.Logging
 {
