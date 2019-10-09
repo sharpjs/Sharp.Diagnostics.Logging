@@ -356,7 +356,7 @@ namespace Sharp.Diagnostics.Logging
                 Trace.TraceInformation("{0}: Completed [{1:N3}s]{2}", name, time, notice);
         }
 
-#if NETFX
+#if NETFRAMEWORK
         // HACK: Activity uses some internal magic to get better accuracy than
         //       DateTime.UtcNow normally delivers.  To have reliable date math
         //       against Activity, this class must use that same logic.
