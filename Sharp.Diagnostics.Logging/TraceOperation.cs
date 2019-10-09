@@ -301,19 +301,21 @@ namespace Sharp.Diagnostics.Logging
 
         private void TraceStarting()
         {
-            if (_name == null)
+            var name = Name;
+            if (name == null)
                 return;
 
             var trace = _trace;
             if (trace != null)
-                trace.TraceInformation(_name + ": Starting");
+                trace.TraceInformation(name + ": Starting");
             else
-                Trace.TraceInformation(_name + ": Starting");
+                Trace.TraceInformation(name + ": Starting");
         }
 
         private void TraceCompleted()
         {
-            if (_name == null)
+            var name = Name;
+            if (name == null)
                 return;
 
             var time      = ElapsedTime.TotalSeconds;
@@ -337,9 +339,9 @@ namespace Sharp.Diagnostics.Logging
             }
 
             if (trace != null)
-                trace.TraceInformation("{0}: Completed [{1:N3}s]{2}", _name, time, notice);
+                trace.TraceInformation("{0}: Completed [{1:N3}s]{2}", name, time, notice);
             else
-                Trace.TraceInformation("{0}: Completed [{1:N3}s]{2}", _name, time, notice);
+                Trace.TraceInformation("{0}: Completed [{1:N3}s]{2}", name, time, notice);
         }
     }
 }
