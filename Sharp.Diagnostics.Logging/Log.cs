@@ -737,6 +737,9 @@ namespace Sharp.Diagnostics.Logging
         /// </summary>
         /// <param name="name">The name of the operation.</param>
         /// <param name="action">The operation.</param>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="action"/> is <c>null</c>.
+        /// </exception>
         [DebuggerStepThrough]
         public static void Do(string name, Action action)
         {
@@ -748,6 +751,9 @@ namespace Sharp.Diagnostics.Logging
         /// </summary>
         /// <param name="name">The name of the operation.</param>
         /// <param name="action">The operation.</param>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="action"/> is <c>null</c>.
+        /// </exception>
         [DebuggerStepThrough]
         public static Task DoAsync(string name, Func<Task> action)
         {
@@ -762,6 +768,9 @@ namespace Sharp.Diagnostics.Logging
         /// <returns>
         ///   The value returned by <paramref name="action"/>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="action"/> is <c>null</c>.
+        /// </exception>
         [DebuggerStepThrough]
         public static T Do<T>(string name, Func<T> action)
         {
@@ -776,6 +785,9 @@ namespace Sharp.Diagnostics.Logging
         /// <returns>
         ///   The value returned by <paramref name="action"/>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="action"/> is <c>null</c>.
+        /// </exception>
         [DebuggerStepThrough]
         public static Task<T> DoAsync<T>(string name, Func<Task<T>> action)
         {

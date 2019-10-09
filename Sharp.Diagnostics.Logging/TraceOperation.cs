@@ -127,6 +127,9 @@ namespace Sharp.Diagnostics.Logging
         /// </summary>
         /// <param name="name">The name of the operation.</param>
         /// <param name="action">The operation.</param>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="action"/> is <c>null</c>.
+        /// </exception>
         [DebuggerStepThrough]
         public static void Do(string? name, Action action)
         {
@@ -139,6 +142,9 @@ namespace Sharp.Diagnostics.Logging
         /// </summary>
         /// <param name="name">The name of the operation.</param>
         /// <param name="action">The operation.</param>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="action"/> is <c>null</c>.
+        /// </exception>
         [DebuggerStepThrough]
         public static Task DoAsync(string? name, Func<Task> action)
         {
@@ -152,6 +158,9 @@ namespace Sharp.Diagnostics.Logging
         /// <param name="trace">The trace source to which to write.</param>
         /// <param name="name">The name of the operation.</param>
         /// <param name="action">The operation.</param>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="action"/> is <c>null</c>.
+        /// </exception>
         [DebuggerStepThrough]
         public static void Do(TraceSource? trace, string? name, Action action)
         {
@@ -178,6 +187,9 @@ namespace Sharp.Diagnostics.Logging
         /// <param name="trace">The trace source to which to write.</param>
         /// <param name="name">The name of the operation.</param>
         /// <param name="action">The operation.</param>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="action"/> is <c>null</c>.
+        /// </exception>
         [DebuggerStepThrough]
         public static async Task DoAsync(TraceSource? trace, string? name, Func<Task> action)
         {
@@ -203,6 +215,9 @@ namespace Sharp.Diagnostics.Logging
         /// </summary>
         /// <param name="name">The name of the operation.</param>
         /// <param name="action">The operation.</param>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="action"/> is <c>null</c>.
+        /// </exception>
         [DebuggerStepThrough]
         public static TResult Do<TResult>(string? name, Func<TResult> action)
         {
@@ -215,6 +230,9 @@ namespace Sharp.Diagnostics.Logging
         /// </summary>
         /// <param name="name">The name of the operation.</param>
         /// <param name="action">The operation.</param>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="action"/> is <c>null</c>.
+        /// </exception>
         [DebuggerStepThrough]
         public static Task<TResult> DoAsync<TResult>(string? name, Func<Task<TResult>> action)
         {
@@ -228,6 +246,9 @@ namespace Sharp.Diagnostics.Logging
         /// <param name="trace">The trace source to which to write.</param>
         /// <param name="name">The name of the operation.</param>
         /// <param name="action">The operation.</param>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="action"/> is <c>null</c>.
+        /// </exception>
         [DebuggerStepThrough]
         public static TResult Do<TResult>(TraceSource? trace, string? name, Func<TResult> action)
         {
@@ -254,6 +275,9 @@ namespace Sharp.Diagnostics.Logging
         /// <param name="trace">The trace source to which to write.</param>
         /// <param name="name">The name of the operation.</param>
         /// <param name="action">The operation.</param>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="action"/> is <c>null</c>.
+        /// </exception>
         [DebuggerStepThrough]
         public static async Task<TResult> DoAsync<TResult>(TraceSource? trace, string? name, Func<Task<TResult>> action)
         {
