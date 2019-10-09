@@ -160,6 +160,13 @@ namespace Sharp.Diagnostics.Logging
         }
 
         [Test]
+        public void Do_ActionWithStaticTrace_NullAction()
+        {
+            Invoking(() => TraceOperation.Do("Test", null!))
+                .Should().Throw<ArgumentNullException>();
+        }
+
+        [Test]
         public void Do_ActionWithStaticTrace_Exception()
         {
             var e = CreateTestException();
@@ -181,6 +188,13 @@ namespace Sharp.Diagnostics.Logging
             TraceOperation.Do(Trace, "Test", () => { count++; });
 
             count.Should().Be(1);
+        }
+
+        [Test]
+        public void Do_ActionWithTraceSource_NullAction()
+        {
+            Invoking(() => TraceOperation.Do(Trace, "Test", null!))
+                .Should().Throw<ArgumentNullException>();
         }
 
         [Test]
@@ -207,6 +221,13 @@ namespace Sharp.Diagnostics.Logging
         }
 
         [Test]
+        public void Do_FuncWithStaticTrace_NullAction()
+        {
+            Invoking(() => TraceOperation.Do<object>("Test", null!))
+                .Should().Throw<ArgumentNullException>();
+        }
+
+        [Test]
         public void Do_FuncWithStaticTrace_Exception()
         {
             var e = CreateTestException();
@@ -227,6 +248,13 @@ namespace Sharp.Diagnostics.Logging
             var result = TraceOperation.Do(Trace, "Test", () => 42);
 
             result.Should().Be(42);
+        }
+
+        [Test]
+        public void Do_FuncWithTraceSource_NullAction()
+        {
+            Invoking(() => TraceOperation.Do<object>(Trace, "Test", null!))
+                .Should().Throw<ArgumentNullException>();
         }
 
         [Test]
@@ -254,6 +282,13 @@ namespace Sharp.Diagnostics.Logging
         }
 
         [Test]
+        public void DoAsync_ActionWithStaticTrace_NullAction()
+        {
+            Awaiting(() => TraceOperation.DoAsync("Test", null!))
+                .Should().Throw<ArgumentNullException>();
+        }
+
+        [Test]
         public void DoAsync_ActionWithStaticTrace_Exception()
         {
             var e = CreateTestException();
@@ -275,6 +310,13 @@ namespace Sharp.Diagnostics.Logging
             await TraceOperation.DoAsync(Trace, "Test", () => { count++; return Task.CompletedTask; });
 
             count.Should().Be(1);
+        }
+
+        [Test]
+        public void DoAsync_ActionWithTraceSource_NullAction()
+        {
+            Awaiting(() => TraceOperation.DoAsync(Trace, "Test", null!))
+                .Should().Throw<ArgumentNullException>();
         }
 
         [Test]
@@ -301,6 +343,13 @@ namespace Sharp.Diagnostics.Logging
         }
 
         [Test]
+        public void DoAsync_FuncWithStaticTrace_NullAction()
+        {
+            Awaiting(() => TraceOperation.DoAsync<object>("Test", null!))
+                .Should().Throw<ArgumentNullException>();
+        }
+
+        [Test]
         public void DoAsync_FuncWithStaticTrace_Exception()
         {
             var e = CreateTestException();
@@ -321,6 +370,13 @@ namespace Sharp.Diagnostics.Logging
             var result = await TraceOperation.DoAsync(Trace, "Test", () => Task.FromResult(42));
 
             result.Should().Be(42);
+        }
+
+        [Test]
+        public void DoAsync_FuncWithTraceSource_NullAction()
+        {
+            Awaiting(() => TraceOperation.DoAsync<object>(Trace, "Test", null!))
+                .Should().Throw<ArgumentNullException>();
         }
 
         [Test]
