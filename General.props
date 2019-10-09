@@ -18,7 +18,7 @@
 
   <PropertyGroup>
     <Product>Sharp.Diagnostics.Logging</Product>
-    <Version>1.0.0-local</Version>
+    <Version>0.1.0-local</Version>
     <Authors>Jeffrey Sharp</Authors>
     <Copyright>Copyright 2019 Jeffrey Sharp</Copyright>
     <PackageLicenseExpression>ISC</PackageLicenseExpression>

@@ -6,5 +6,8 @@ Most lines should begin with one of these words:
 
 ## [Unreleased](https://github.com/sharpjs/Sharp.Diagnostics.Logging/compare/v0.0.0...HEAD)
 
+## [0.1.0](https://github.com/sharpjs/Sharp.Diagnostics.Logging/compare/v0.0.0...v0.1.0)
+- Add support for `Activity` API from `System.Diagonstics.DiagnosticSource` package
+
 ## [0.0.0](https://github.com/sharpjs/Sharp.Diagnostics.Logging/tree/v0.0.0)
 Initial release.
