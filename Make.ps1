@@ -75,7 +75,7 @@ function Main {
     if ($Test -or $Coverage) {
         Set-Location -LiteralPath "$AssemblyNameRoot.Tests"
         Invoke-TestForTargetFramework net48
-        Invoke-TestForTargetFramework netcoreapp2.2
+        Invoke-TestForTargetFramework netcoreapp3.0
     }
 } 
 
