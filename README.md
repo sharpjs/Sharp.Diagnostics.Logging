@@ -2,6 +2,14 @@
 
 Micro-framework for logging via the .NET `TraceSource` API.
 
+## Status
+
+- 100% test coverage
+- Version 0.0.0 used in production for several years with no reported bugs.
+- Version 0.1.0 released recently, adding support for correlation via
+  [`System.Diagnostics.Activity`](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.activity).
+- Version 1.0.0 in development.
+
 ## Building From Source
 
 Requirements:
@@ -18,9 +26,3 @@ Requirements:
 # Build and run tests w/coverage
 .\Make.ps1 -Coverage [-Configuration <String>]
 ```
-
-## Status
-
-- Version 0.0.0 used in production for several years.  *No reported bugs.*
-- Version 1.0.0 in development.
-- Fully documented via IntelliSense, but no external documentation.
