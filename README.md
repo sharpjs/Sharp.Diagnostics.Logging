@@ -13,8 +13,8 @@ Micro-framework for logging via the .NET `TraceSource` API.
 ## Building From Source
 
 Requirements:
-- .NET Framework SDKs: 4.5, 4.6, 4.8
-- .NET Core 2.2 SDK
+- .NET Framework SDK: 4.5, 4.8
+- .NET Core SDK: 3.0
 
 ```powershell
 # The default: build and run tests
