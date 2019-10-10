@@ -10,6 +10,14 @@ Micro-framework for logging via the .NET `TraceSource` API.
   [`System.Diagnostics.Activity`](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.activity).
 - Version 1.0.0 in development.
 
+## Installation
+
+A [NuGet package](https://www.nuget.org/packages/Sharp.Diagnostics.Logging/) is available.
+
+## Documentation
+
+Documented via IntelliSense.  No external documentation.
+
 ## Building From Source
 
 Requirements:
