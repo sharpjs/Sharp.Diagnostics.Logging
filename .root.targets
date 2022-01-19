@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.Build.NoTargets/3.2.14">
+  <!-- https://github.com/microsoft/MSBuildSdks/tree/master/src/NoTargets -->
 
   <!--
     Copyright 2022 Jeffrey Sharp
@@ -17,12 +18,21 @@
   -->
 
   <PropertyGroup>
-    <Description>Micro-framework for logging via the .NET TraceSource API</Description>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <SkipCopyBuildProduct>true</SkipCopyBuildProduct>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
+    <IsPublishable>false</IsPublishable>
+    <IsPackable>false</IsPackable>
+    <SetGitHubActionsVersion>true</SetGitHubActionsVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="[6.0.0,7.0.0)" />
+    <None Include="**" Exclude="Sharp.*\**;dist\**;coverage\**;$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);$(MSBuildThisFile)" />
+    <None Include=".*\**" Exclude=".git\**;.vs\**" />
   </ItemGroup>
 
 </Project>

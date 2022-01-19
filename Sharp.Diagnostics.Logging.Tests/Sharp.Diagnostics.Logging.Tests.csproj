@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <!--
-    Copyright (C) 2019 Jeffrey Sharp
+    Copyright 2022 Jeffrey Sharp
 
     Permission to use, copy, modify, and distribute this software for any
     purpose with or without fee is hereby granted, provided that the above
@@ -16,31 +16,19 @@
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
   -->
 
-  <Import Project="..\General.props" />
-  <Import Project="..\Local.props" Condition="Exists('..\Local.props')" />
-
   <PropertyGroup>
     <Description>Tests for Sharp.Diagnostics.Logging</Description>
-    <TargetFrameworks>net48;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net48;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>Sharp.Diagnostics.Logging</RootNamespace>
-    <DocumentationFile></DocumentationFile>
-    <NoWarn>IDE1006</NoWarn>
+    <NoWarn>$(NoWarn);IDE1006</NoWarn> <!-- Async suffix not desired for test project -->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.9.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
-    <PackageReference Include="Moq" Version="4.13.0" />
-    <PackageReference Include="NUnit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <DotNetCliToolReference Include="JetBrains.dotCover.DotNetCliTool" Version="2019.2.2" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Sharp.Diagnostics.Logging\Sharp.Diagnostics.Logging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Subatomix.Testing" Version="1.1.0" />
   </ItemGroup>
 
 </Project>

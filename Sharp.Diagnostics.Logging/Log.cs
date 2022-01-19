@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright (C) 2019 Jeffrey Sharp
+    Copyright 2022 Jeffrey Sharp
 
     Permission to use, copy, modify, and distribute this software for any
     purpose with or without fee is hereby granted, provided that the above
@@ -46,10 +46,8 @@ namespace Sharp.Diagnostics.Logging
 
         #region TraceSource
 
-#pragma warning disable IDE1006 // Naming Styles
         private static readonly TraceSource _trace
             = new TProvider().GetTraceSource();
-#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
         ///   Gets the <c>System.Diagnostics.TraceSource</c> instance to which

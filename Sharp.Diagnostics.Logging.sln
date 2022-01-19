@@ -1,21 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29306.81
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{94772DD9-7E78-4633-8C80-11DDC7C0C0F0}"
-	ProjectSection(SolutionItems) = preProject
-		.gitattributes = .gitattributes
-		.gitignore = .gitignore
-		CHANGES.md = CHANGES.md
-		General.cs = General.cs
-		General.props = General.props
-		InheritDoc.targets = InheritDoc.targets
-		LICENSE.txt = LICENSE.txt
-		Make.ps1 = Make.ps1
-		README.md = README.md
-		Set-Version.ps1 = Set-Version.ps1
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = ".root", ".root.targets", "{F884C849-6E6A-46FF-B496-210AD786547B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharp.Diagnostics.Logging", "Sharp.Diagnostics.Logging\Sharp.Diagnostics.Logging.csproj", "{22499849-04A9-4940-B907-A6671B8DEAA7}"
 EndProject
@@ -27,6 +15,8 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F884C849-6E6A-46FF-B496-210AD786547B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F884C849-6E6A-46FF-B496-210AD786547B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22499849-04A9-4940-B907-A6671B8DEAA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{22499849-04A9-4940-B907-A6671B8DEAA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22499849-04A9-4940-B907-A6671B8DEAA7}.Release|Any CPU.ActiveCfg = Release|Any CPU

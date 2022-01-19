@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2019 Jeffrey Sharp
+    Copyright 2022 Jeffrey Sharp
 
     Permission to use, copy, modify, and distribute this software for any
     purpose with or without fee is hereby granted, provided that the above
@@ -62,7 +62,8 @@ namespace Sharp.Diagnostics.Logging
         {
             _trace = trace;
 
-            _activity = new Activity(name).Start();
+            // Will throw ArgumentException if name is null or empty
+            _activity = new Activity(name!).Start();
 
             StartCorrelationManagerOperation(_activity);
 
