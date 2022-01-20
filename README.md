@@ -1,14 +1,15 @@
 # Sharp.Diagnostics.Logging
 
-Micro-framework for logging via the .NET `TraceSource` API.
+Micro-framework to improve the ergonomics of logging with the .NET
+`TraceSource` API.
 
 ## Status
 
-- 100% test coverage
-- Version 0.0.0 used in production for several years with no reported bugs.
-- Version 0.1.0 released recently, adding support for correlation via
-  [`System.Diagnostics.Activity`](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.activity).
-- Version 1.0.0 in development.
+- 100% test coverage.
+- Used in production for several years with no reported bugs.
+- No further development except for occasional maintenance.
+  The replacement for the legacy `TraceSource` API is
+  [`Microsoft.Extensions.Logging`](https://www.nuget.org/packages/Microsoft.Extensions.Logging/).
 
 ## Installation
 
@@ -21,8 +22,8 @@ Documented via IntelliSense.  No external documentation.
 ## Building From Source
 
 Requirements:
-- .NET Framework SDK: 4.5, 4.8
-- .NET Core SDK: 3.0
+- .NET Framework SDK: 4.6.1, 4.8
+- .NET Core SDK: 3.1
 
 ```powershell
 # The default: build and run tests
