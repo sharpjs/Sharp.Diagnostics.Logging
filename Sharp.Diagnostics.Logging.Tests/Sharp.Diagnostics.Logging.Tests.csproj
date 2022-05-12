@@ -27,13 +27,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Subatomix.Testing" Version="1.1.0" />
+    <PackageReference Include="Subatomix.Testing" Version="2.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="FluentAssertions" />
+    <Using Include="FluentAssertions.FluentActions" Static="true" />
     <Using Include="Moq" />
     <Using Include="NUnit.Framework" />
+    <Using Include="System.Diagnostics.TraceEventType" Static="true" />
   </ItemGroup>
 
 </Project>

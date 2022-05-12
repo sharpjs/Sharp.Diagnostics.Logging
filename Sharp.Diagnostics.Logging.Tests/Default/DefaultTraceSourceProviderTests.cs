@@ -1,4 +1,4 @@
-﻿/*
+/*
     Copyright 2022 Jeffrey Sharp
 
     Permission to use, copy, modify, and distribute this software for any
@@ -14,21 +14,17 @@
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-using FluentAssertions;
-using NUnit.Framework;
+namespace Sharp.Diagnostics.Logging.Default;
 
-namespace Sharp.Diagnostics.Logging.Default
+[TestFixture]
+public class DefaultTraceSourceProviderTests
 {
-    [TestFixture]
-    public class DefaultTraceSourceProviderTests
+    [Test]
+    public void GetTraceSource()
     {
-        [Test]
-        public void GetTraceSource()
-        {
-            var traceSource = new DefaultTraceSourceProvider().GetTraceSource();
+        var traceSource = new DefaultTraceSourceProvider().GetTraceSource();
 
-            traceSource     .Should().NotBeNull();
-            traceSource.Name.Should().Be(DefaultTraceSourceProvider.TraceSourceName);
-        }
+        traceSource     .Should().NotBeNull();
+        traceSource.Name.Should().Be(DefaultTraceSourceProvider.TraceSourceName);
     }
 }
