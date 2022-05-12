@@ -26,7 +26,7 @@
   <!-- Descriptive properties -->
   <PropertyGroup>
     <Product>Sharp.Diagnostics.Logging</Product>
-    <VersionPrefix>0.2.0</VersionPrefix>
+    <VersionPrefix>1.0.0</VersionPrefix>
     <Authors>Jeffrey Sharp</Authors>
     <Company>Subatomix Research Inc.</Company>
     <Copyright>© $([System.DateTime]::UtcNow.Year) $(Authors)</Copyright>
