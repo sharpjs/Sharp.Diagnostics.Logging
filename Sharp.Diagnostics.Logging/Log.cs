@@ -801,7 +801,7 @@ public abstract class Log<TProvider>
     ///   <para>
     ///     This method is intended for use with the logical activities of a
     ///     <see cref="CorrelationManager"/>.
-    ///     The <paramref name="relatedActivityId"/> parameter relates to the
+    ///     The <paramref name="newActivityId"/> parameter relates to the
     ///     <see cref="CorrelationManager.ActivityId"/> property.
     ///   </para>
     ///   <para>
@@ -828,7 +828,7 @@ public abstract class Log<TProvider>
     ///   <para>
     ///     This method is intended for use with the logical activities of a
     ///     <see cref="CorrelationManager"/>.
-    ///     The <paramref name="relatedActivityId"/> parameter relates to the
+    ///     The <paramref name="newActivityId"/> parameter relates to the
     ///     <see cref="CorrelationManager.ActivityId"/> property.
     ///   </para>
     ///   <para>
