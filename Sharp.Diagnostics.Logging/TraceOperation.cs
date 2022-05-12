@@ -21,8 +21,7 @@ using System.Runtime.CompilerServices;
 namespace Sharp.Diagnostics.Logging;
 
 /// <summary>
-///   Represents an operation whose start and end are logged to a trace
-///   source.
+///   Represents an operation whose start and end are logged to a trace source.
 /// </summary>
 public sealed class TraceOperation : IDisposable
 {
@@ -32,13 +31,13 @@ public sealed class TraceOperation : IDisposable
     /// <summary>
     ///   Initializes a new <see cref="TraceOperation"/> instance with the
     ///   specified operation name.  The instance will use the static
-    ///   <see cref="Trace"/> class to log the start and end of the
-    ///   operation.
+    ///   <see cref="Trace"/> class to log the start and end of the operation.
     /// </summary>
     /// <param name="name">
     ///   The name of the operation.  The default value is the member name
     ///   of the calling method or property, if the compiler supports
-    ///   <c>CallerMemberNameAttribute</c>, and <c>null</c> otherwise.
+    ///   <see cref="CallerMemberNameAttribute"/>, and <see langword="null"/>
+    ///   otherwise.
     /// </param>
     public TraceOperation([CallerMemberName] string? name = null)
         : this(null, name) { }
@@ -53,7 +52,8 @@ public sealed class TraceOperation : IDisposable
     /// <param name="name">
     ///   The name of the operation.  The default value is the member name
     ///   of the calling method or property, if the compiler supports
-    ///   <c>CallerMemberNameAttribute</c>, and <c>null</c> otherwise.
+    ///   <see cref="CallerMemberNameAttribute"/>, and <see langword="null"/>
+    ///   otherwise.
     /// </param>
     public TraceOperation(TraceSource? trace, [CallerMemberName] string? name = null)
     {
@@ -134,13 +134,13 @@ public sealed class TraceOperation : IDisposable
     }
 
     /// <summary>
-    ///   Runs a logical operation, writing start, stop, and error entries
-    ///   to <see cref="Trace"/>.
+    ///   Runs a logical operation, writing start, stop, and error entries to
+    ///   <see cref="Trace"/>.
     /// </summary>
     /// <param name="name">The name of the operation.</param>
     /// <param name="action">The operation.</param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="action"/> is <c>null</c>.
+    ///   <paramref name="action"/> is <see langword="null"/>.
     /// </exception>
     [DebuggerStepThrough]
     public static void Do(string? name, Action action)
@@ -155,7 +155,7 @@ public sealed class TraceOperation : IDisposable
     /// <param name="name">The name of the operation.</param>
     /// <param name="action">The operation.</param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="action"/> is <c>null</c>.
+    ///   <paramref name="action"/> is <see langword="null"/>.
     /// </exception>
     [DebuggerStepThrough]
     public static Task DoAsync(string? name, Func<Task> action)
@@ -164,14 +164,14 @@ public sealed class TraceOperation : IDisposable
     }
 
     /// <summary>
-    ///   Runs a logical operation, writing start, stop, and error entries
-    ///   to the specified trace source.
+    ///   Runs a logical operation, writing start, stop, and error entries to
+    ///   the specified trace source.
     /// </summary>
     /// <param name="trace">The trace source to which to write.</param>
     /// <param name="name">The name of the operation.</param>
     /// <param name="action">The operation.</param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="action"/> is <c>null</c>.
+    ///   <paramref name="action"/> is <see langword="null"/>.
     /// </exception>
     [DebuggerStepThrough]
     public static void Do(TraceSource? trace, string? name, Action action)
@@ -200,7 +200,7 @@ public sealed class TraceOperation : IDisposable
     /// <param name="name">The name of the operation.</param>
     /// <param name="action">The operation.</param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="action"/> is <c>null</c>.
+    ///   <paramref name="action"/> is <see langword="null"/>.
     /// </exception>
     [DebuggerStepThrough]
     public static async Task DoAsync(TraceSource? trace, string? name, Func<Task> action)
@@ -222,13 +222,13 @@ public sealed class TraceOperation : IDisposable
     }
 
     /// <summary>
-    ///   Runs a logical operation, writing start, stop, and error entries
-    ///   to <see cref="Trace"/>.
+    ///   Runs a logical operation, writing start, stop, and error entries to
+    ///   <see cref="Trace"/>.
     /// </summary>
     /// <param name="name">The name of the operation.</param>
     /// <param name="action">The operation.</param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="action"/> is <c>null</c>.
+    ///   <paramref name="action"/> is <see langword="null"/>.
     /// </exception>
     [DebuggerStepThrough]
     public static TResult Do<TResult>(string? name, Func<TResult> action)
@@ -243,7 +243,7 @@ public sealed class TraceOperation : IDisposable
     /// <param name="name">The name of the operation.</param>
     /// <param name="action">The operation.</param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="action"/> is <c>null</c>.
+    ///   <paramref name="action"/> is <see langword="null"/>.
     /// </exception>
     [DebuggerStepThrough]
     public static Task<TResult> DoAsync<TResult>(string? name, Func<Task<TResult>> action)
@@ -252,14 +252,14 @@ public sealed class TraceOperation : IDisposable
     }
 
     /// <summary>
-    ///   Runs a logical operation, writing start, stop, and error entries
-    ///   to the specified trace source.
+    ///   Runs a logical operation, writing start, stop, and error entries to
+    ///   the specified trace source.
     /// </summary>
     /// <param name="trace">The trace source to which to write.</param>
     /// <param name="name">The name of the operation.</param>
     /// <param name="action">The operation.</param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="action"/> is <c>null</c>.
+    ///   <paramref name="action"/> is <see langword="null"/>.
     /// </exception>
     [DebuggerStepThrough]
     public static TResult Do<TResult>(TraceSource? trace, string? name, Func<TResult> action)
@@ -288,10 +288,11 @@ public sealed class TraceOperation : IDisposable
     /// <param name="name">The name of the operation.</param>
     /// <param name="action">The operation.</param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="action"/> is <c>null</c>.
+    ///   <paramref name="action"/> is <see langword="null"/>.
     /// </exception>
     [DebuggerStepThrough]
-    public static async Task<TResult> DoAsync<TResult>(TraceSource? trace, string? name, Func<Task<TResult>> action)
+    public static async Task<TResult> DoAsync<TResult>(
+        TraceSource? trace, string? name, Func<Task<TResult>> action)
     {
         if (action is null)
             throw new ArgumentNullException(nameof(action));

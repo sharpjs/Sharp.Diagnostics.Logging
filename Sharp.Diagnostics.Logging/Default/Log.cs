@@ -17,6 +17,7 @@
 namespace Sharp.Diagnostics.Logging.Default;
 
 /// <summary>
-///   Ready-to-use logging API.  Writes to a <c>TraceSource</c> named 'Log'.
+///   Ready-to-use logging API that writes to a <see cref="TraceSource"/> named
+///   <c>Log</c>.
 /// </summary>
 public abstract class Log : Log<DefaultTraceSourceProvider> { }

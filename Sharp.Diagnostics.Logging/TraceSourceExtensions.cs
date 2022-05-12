@@ -19,15 +19,16 @@ using System.Runtime.CompilerServices;
 namespace Sharp.Diagnostics.Logging;
 
 /// <summary>
-///   Convenience methods for <c>TraceSouce</c>-based logging.
+///   Convenience extension methods for <see cref="TraceSource"/>.
 /// </summary>
 public static class TraceSourceExtensions
 {
     #region Critical
 
     /// <summary>
-    ///   Writes a critical error event to the trace listeners in the <c>Listeners</c>
-    ///   collection using the specified message.
+    ///   Writes a critical error event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="message">A message for the event.</param>
@@ -36,8 +37,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Critical, 0, message);
 
     /// <summary>
-    ///   Writes a critical error event to the trace listeners in the <c>Listeners</c>
-    ///   collection using the specified event identifier and message.
+    ///   Writes a critical error event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -47,16 +49,17 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Critical, id, message);
 
     /// <summary>
-    ///   Writes a critical error event to the trace listeners in the <c>Listeners</c>
-    ///   collection using the specified format string and argument array.
+    ///   Writes a critical error event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   format string and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/> null.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -65,17 +68,18 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Critical, 0, format, args);
 
     /// <summary>
-    ///   Writes a critical error event to the trace listeners in the <c>Listeners</c>
-    ///   collection using the specified event identifier, format string, and argument array.
+    ///   Writes a critical error event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier, format string, and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -84,8 +88,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Critical, id, format, args);
 
     /// <summary>
-    ///   Writes a critical error event to the trace listeners in the <c>Listeners</c>
-    ///   collection using the specified exception.
+    ///   Writes a critical error event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="exception">An exception to report in the event.</param>
@@ -94,8 +99,9 @@ public static class TraceSourceExtensions
         => trace.TraceData(TraceEventType.Critical, 0, exception);
 
     /// <summary>
-    ///   Writes a critical error event to the trace listeners in the <c>Listeners</c>
-    ///   collection using the specified event identifier and exception.
+    ///   Writes a critical error event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -108,8 +114,9 @@ public static class TraceSourceExtensions
     #region Error
 
     /// <summary>
-    ///   Writes an error event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified message.
+    ///   Writes an error event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="message">A message for the event.</param>
@@ -118,8 +125,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Error, 0, message);
 
     /// <summary>
-    ///   Writes an error event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event identifier and message.
+    ///   Writes an error event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -129,16 +137,17 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Error, id, message);
 
     /// <summary>
-    ///   Writes an error event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified format string and argument array.
+    ///   Writes an error event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   format string and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -147,17 +156,18 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Error, 0, format, args);
 
     /// <summary>
-    ///   Writes an error event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event identifier, format string, and argument array.
+    ///   Writes an error event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier, format string, and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -166,8 +176,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Error, id, format, args);
 
     /// <summary>
-    ///   Writes an error event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified exception.
+    ///   Writes an error event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="exception">An exception to report in the event.</param>
@@ -176,8 +187,9 @@ public static class TraceSourceExtensions
         => trace.TraceData(TraceEventType.Error, 0, exception);
 
     /// <summary>
-    ///   Writes an error event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event identifier and exception.
+    ///   Writes an error event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -190,8 +202,9 @@ public static class TraceSourceExtensions
     #region Warning
 
     /// <summary>
-    ///   Writes a warning event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified message.
+    ///   Writes a warning event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="message">A message for the event.</param>
@@ -200,8 +213,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Warning, 0, message);
 
     /// <summary>
-    ///   Writes a warning event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified event identifier and message.
+    ///   Writes a warning event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -211,16 +225,17 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Warning, id, message);
 
     /// <summary>
-    ///   Writes a warning event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified format string and argument array.
+    ///   Writes a warning event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   format string and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -229,17 +244,18 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Warning, 0, format, args);
 
     /// <summary>
-    ///   Writes a warning event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified event identifier, format string, and argument array.
+    ///   Writes a warning event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier, format string, and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -248,8 +264,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Warning, id, format, args);
 
     /// <summary>
-    ///   Writes a warning event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified exception.
+    ///   Writes a warning event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="exception">An exception to report in the event.</param>
@@ -258,8 +275,9 @@ public static class TraceSourceExtensions
         => trace.TraceData(TraceEventType.Warning, 0, exception);
 
     /// <summary>
-    ///   Writes a warning event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified event identifier and exception.
+    ///   Writes a warning event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -275,8 +293,9 @@ public static class TraceSourceExtensions
     // void TraceInformation(string message)
 
     /// <summary>
-    ///   Writes an informational event to the trace listeners in the <c>Listeners</c>
-    ///   collection using the specified message.
+    ///   Writes an informational event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -289,17 +308,18 @@ public static class TraceSourceExtensions
     // void TraceInformation(string format, params object[] args)
 
     /// <summary>
-    ///   Writes an informational event to the trace listeners in the <c>Listeners</c>
-    ///   collection using the specified event identifier, format string, and argument array.
+    ///   Writes an informational event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier, format string, and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -308,8 +328,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Information, id, format, args);
 
     /// <summary>
-    ///   Writes an informational event to the trace listeners in the <c>Listeners</c>
-    ///   collection using the specified exception.
+    ///   Writes an informational event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="exception">An exception to report in the event.</param>
@@ -318,8 +339,9 @@ public static class TraceSourceExtensions
         => trace.TraceData(TraceEventType.Information, 0, exception);
 
     /// <summary>
-    ///   Writes an informational event to the trace listeners in the <c>Listeners</c>
-    ///   collection using the specified event identifier and exception.
+    ///   Writes an informational event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -332,8 +354,9 @@ public static class TraceSourceExtensions
     #region Verbose
 
     /// <summary>
-    ///   Writes a verbose event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified message.
+    ///   Writes a verbose event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="message">A message for the event.</param>
@@ -342,8 +365,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Verbose, 0, message);
 
     /// <summary>
-    ///   Writes a verbose event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified event identifier and message.
+    ///   Writes a verbose event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -353,16 +377,17 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Verbose, id, message);
 
     /// <summary>
-    ///   Writes a verbose event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified format string and argument array.
+    ///   Writes a verbose event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   format string and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -371,17 +396,18 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Verbose, 0, format, args);
 
     /// <summary>
-    ///   Writes a verbose event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified event identifier, format string, and argument array.
+    ///   Writes a verbose event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier, format string, and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -390,8 +416,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Verbose, id, format, args);
 
     /// <summary>
-    ///   Writes a verbose event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified exception.
+    ///   Writes a verbose event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="exception">An exception to report in the event.</param>
@@ -400,8 +427,9 @@ public static class TraceSourceExtensions
         => trace.TraceData(TraceEventType.Verbose, 0, exception);
 
     /// <summary>
-    ///   Writes a verbose event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified event identifier and exception.
+    ///   Writes a verbose event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -414,8 +442,9 @@ public static class TraceSourceExtensions
     #region Start
 
     /// <summary>
-    ///   Writes a start event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified message.
+    ///   Writes a start event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="message">A message for the event.</param>
@@ -424,8 +453,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Start, 0, message);
 
     /// <summary>
-    ///   Writes a start event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event identifier and message.
+    ///   Writes a start event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -435,16 +465,17 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Start, id, message);
 
     /// <summary>
-    ///   Writes a start event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified format string and argument array.
+    ///   Writes a start event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   format string and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -453,17 +484,18 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Start, 0, format, args);
 
     /// <summary>
-    ///   Writes a start event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event identifier, format string, and argument array.
+    ///   Writes a start event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier, format string, and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -472,8 +504,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Start, id, format, args);
 
     /// <summary>
-    ///   Writes a start event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified exception.
+    ///   Writes a start event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="exception">An exception to report in the event.</param>
@@ -482,8 +515,9 @@ public static class TraceSourceExtensions
         => trace.TraceData(TraceEventType.Start, 0, exception);
 
     /// <summary>
-    ///   Writes a start event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event identifier and exception.
+    ///   Writes a start event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -496,8 +530,9 @@ public static class TraceSourceExtensions
     #region Stop
 
     /// <summary>
-    ///   Writes a stop event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified message.
+    ///   Writes a stop event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="message">A message for the event.</param>
@@ -506,8 +541,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Stop, 0, message);
 
     /// <summary>
-    ///   Writes a stop event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event identifier and message.
+    ///   Writes a stop event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -517,16 +553,17 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Stop, id, message);
 
     /// <summary>
-    ///   Writes a stop event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified format string and argument array.
+    ///   Writes a stop event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   format string and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -535,17 +572,18 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Stop, 0, format, args);
 
     /// <summary>
-    ///   Writes a stop event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event identifier, format string, and argument array.
+    ///   Writes a stop event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier, format string, and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -554,8 +592,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Stop, id, format, args);
 
     /// <summary>
-    ///   Writes a stop event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified exception.
+    ///   Writes a stop event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="exception">An exception to report in the event.</param>
@@ -564,8 +603,9 @@ public static class TraceSourceExtensions
         => trace.TraceData(TraceEventType.Stop, 0, exception);
 
     /// <summary>
-    ///   Writes a stop event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event identifier and exception.
+    ///   Writes a stop event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -578,8 +618,9 @@ public static class TraceSourceExtensions
     #region Suspend
 
     /// <summary>
-    ///   Writes a suspend event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified message.
+    ///   Writes a suspend event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="message">A message for the event.</param>
@@ -588,8 +629,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Suspend, 0, message);
 
     /// <summary>
-    ///   Writes a suspend event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified event identifier and message.
+    ///   Writes a suspend event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -599,16 +641,17 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Suspend, id, message);
 
     /// <summary>
-    ///   Writes a suspend event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified format string and argument array.
+    ///   Writes a suspend event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   format string and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -617,17 +660,18 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Suspend, 0, format, args);
 
     /// <summary>
-    ///   Writes a suspend event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified event identifier, format string, and argument array.
+    ///   Writes a suspend event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier, format string, and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -636,8 +680,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Suspend, id, format, args);
 
     /// <summary>
-    ///   Writes a suspend event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified exception.
+    ///   Writes a suspend event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="exception">An exception to report in the event.</param>
@@ -646,8 +691,9 @@ public static class TraceSourceExtensions
         => trace.TraceData(TraceEventType.Suspend, 0, exception);
 
     /// <summary>
-    ///   Writes a suspend event to the trace listeners in the <c>Listeners</c> collection
-    ///   using the specified event identifier and exception.
+    ///   Writes a suspend event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -660,8 +706,9 @@ public static class TraceSourceExtensions
     #region Resume
 
     /// <summary>
-    ///   Writes a resume event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified message.
+    ///   Writes a resume event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="message">A message for the event.</param>
@@ -670,8 +717,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Resume, 0, message);
 
     /// <summary>
-    ///   Writes a resume event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event identifier and message.
+    ///   Writes a resume event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -681,16 +729,17 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Resume, id, message);
 
     /// <summary>
-    ///   Writes a resume event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified format string and argument array.
+    ///   Writes a resume event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   format string and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -699,17 +748,18 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Resume, 0, format, args);
 
     /// <summary>
-    ///   Writes a resume event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event identifier, format string, and argument array.
+    ///   Writes a resume event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier, format string, and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -718,8 +768,9 @@ public static class TraceSourceExtensions
         => trace.TraceEvent(TraceEventType.Resume, id, format, args);
 
     /// <summary>
-    ///   Writes a resume event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified exception.
+    ///   Writes a resume event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="exception">An exception to report in the event.</param>
@@ -728,8 +779,9 @@ public static class TraceSourceExtensions
         => trace.TraceData(TraceEventType.Resume, 0, exception);
 
     /// <summary>
-    ///   Writes a resume event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event identifier and exception.
+    ///   Writes a resume event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event identifier and exception.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="id">A numeric identifier for the event.</param>
@@ -742,14 +794,15 @@ public static class TraceSourceExtensions
     #region Operations / Correlation
 
     /// <summary>
-    ///   Starts a logical operation, writing a start event to the trace listeners in the
-    ///   <c>Listeners</c> collection.
+    ///   Starts a logical operation, writing a start event to the trace
+    ///   listeners in the <see cref="TraceSource.Listeners"/> collection.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="name">The name of the operation.</param>
     /// <returns>
-    ///   An <c>TraceOperation</c> representing the logical operation.
-    ///   When disposed, the <c>TraceOperation</c> writes stop and error entries to the trace listeners in the <c>Listeners</c> collection using the specified .
+    ///   A <see cref="TraceOperation"/> representing the logical operation.
+    ///   When disposed, the object writes stop and error entries to the the
+    ///   trace listeners in the <see cref="TraceSource.Listeners"/> collection.
     /// </returns>
     public static TraceOperation Operation(this TraceSource trace, [CallerMemberName] string name = null)
     {
@@ -757,8 +810,9 @@ public static class TraceSourceExtensions
     }
 
     /// <summary>
-    ///   Runs a logical operation, writing start, stop, and error entries to the trace
-    ///   listeners in the <c>Listeners</c> collection.
+    ///   Runs a logical operation, writing start, stop, and error entries to
+    ///   the trace listeners in the <see cref="TraceSource.Listeners"/>
+    ///   collection.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="name">The name of the operation.</param>
@@ -770,8 +824,9 @@ public static class TraceSourceExtensions
     }
 
     /// <summary>
-    ///   Runs a logical operation, writing start, stop, and error entries to the trace
-    ///   listeners in the <c>Listeners</c> collection.
+    ///   Runs a logical operation, writing start, stop, and error entries to
+    ///   the trace listeners in the <see cref="TraceSource.Listeners"/>
+    ///   collection.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="name">The name of the operation.</param>
@@ -785,27 +840,34 @@ public static class TraceSourceExtensions
         return TraceOperation.Do(trace, name, action);
     }
 
-    // TODO: DoAsync
+    // MISSING: DoAsync
 
     // Provided by TraceSource:
     // void TraceTransfer(int id, string message, Guid newActivityId)
 
     /// <summary>
-    ///   Writes a trace transfer message to the trace listeners in the <c>Listeners</c>
-    ///   collection using the specified message and related activity identifier.
+    ///   Writes a trace transfer message to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   message and related activity identifier.
     /// </summary>
     /// <param name="trace">The trace source to which the message should be written.</param>
     /// <param name="message">The trace message to write.</param>
     /// <param name="relatedActivityId">The identifier of the related activity.</param>
     /// <remarks>
-    ///   <c>TraceTransfer</c> is intended to be used with the logical activities of a
-    ///   <c>CorrelationManager</c>. The <paramref name="relatedActivityId"/> parameter
-    ///   relates to the <c>ActivityId</c> property of a <c>CorrelationManager</c> object.
-    ///   If a logical operation begins in one activity and transfers to another,
-    ///   the second activity should log the transfer by calling the <c>TraceTransfer</c>
-    ///   method.  The <c>TraceTransfer</c> call relates the new activity identifier to the
-    ///   previous one.  An example consumer of this functionality is a trace viewer that can
-    ///   report logical operations that span multiple activities.
+    ///   <para>
+    ///     This method is intended for use with the logical activities of a
+    ///     <see cref="CorrelationManager"/>.
+    ///     The <paramref name="relatedActivityId"/> parameter relates to the
+    ///     <see cref="CorrelationManager.ActivityId"/> property.
+    ///   </para>
+    ///   <para>
+    ///     If a logical operation begins in one activity and transfers to
+    ///     another, the second activity should log the transfer by calling
+    ///     this method.  The call relates the new activity identifier to the
+    ///     previous identifier.  An example consumer of this functionality is
+    ///     a trace viewer that can report logical operations spanning multiple
+    ///     activities.
+    ///   </para>
     /// </remarks>
     [Conditional("TRACE")]
     public static void TraceTransfer(this TraceSource trace, string message, Guid relatedActivityId)
@@ -815,8 +877,9 @@ public static class TraceSourceExtensions
     #region Event
 
     /// <summary>
-    ///   Writes a trace event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event type and message.
+    ///   Writes a trace event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event type and message.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="eventType">The type of event to write.</param>
@@ -829,17 +892,18 @@ public static class TraceSourceExtensions
     // void TraceEvent(TraceEventType eventType, int id, string message);
 
     /// <summary>
-    ///   Writes a trace event to the trace listeners in the <c>Listeners</c> collection using
-    ///   the specified event type, format string, and argument array.
+    ///   Writes a trace event to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event type, format string, and argument array.
     /// </summary>
     /// <param name="trace">The trace source to which the event should be written.</param>
     /// <param name="eventType">The type of event to write.</param>
     /// <param name="format">A format string to build a message for the event.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -856,8 +920,9 @@ public static class TraceSourceExtensions
     #region Data
 
     /// <summary>
-    ///   Writes trace data to the trace listeners in the <c>Listeners</c> collection using the
-    ///   specified event type and trace data.
+    ///   Writes trace data to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event type and trace data.
     /// </summary>
     /// <param name="trace">The trace source to which the trace data should be written.</param>
     /// <param name="eventType">The event type of the trace data.</param>
@@ -870,8 +935,9 @@ public static class TraceSourceExtensions
     // void TraceData(TraceEventType eventType, int id, object data)
 
     /// <summary>
-    ///   Writes trace data to the trace listeners in the <c>Listeners</c> collection using the
-    ///   specified event type and trace data array.
+    ///   Writes trace data to the trace listeners in the
+    ///   <see cref="TraceSource.Listeners"/> collection using the specified
+    ///   event type and trace data array.
     /// </summary>
     /// <param name="trace">The trace source to which the trace data should be written.</param>
     /// <param name="eventType">The event type of the trace data.</param>

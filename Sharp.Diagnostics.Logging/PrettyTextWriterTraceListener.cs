@@ -27,17 +27,15 @@ public class PrettyTextWriterTraceListener : TextWriterTraceListener
         DefaultLogFileName = "Log.txt";
 
     /// <summary>
-    ///   Initializes a new instance of the
-    ///   <see cref="PrettyTextWriterTraceListener"/> class that writes to
-    ///   the console standard output stream.
+    ///   Initializes a new <see cref="PrettyTextWriterTraceListener"/>
+    ///   instance that writes to the console standard output stream.
     /// </summary>
     public PrettyTextWriterTraceListener()
         : base(Console.Out) { }
 
     /// <summary>
-    ///   Initializes a new instance of the
-    ///   <see cref="PrettyTextWriterTraceListener"/> class that writes to
-    ///   the specified file.
+    ///   Initializes a new <see cref="PrettyTextWriterTraceListener"/>
+    ///   instance that writes to the specified file.
     /// </summary>
     /// <param name="fileName">
     ///   The path of the file to write, relative to the program.

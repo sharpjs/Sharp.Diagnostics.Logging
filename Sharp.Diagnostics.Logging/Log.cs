@@ -21,16 +21,19 @@ using System.Security;
 namespace Sharp.Diagnostics.Logging;
 
 /// <summary>
-///   Convenience methods for <c>TraceSouce</c>-based logging.
+///   Convenience methods for <see cref="TraceSource"/>-based logging.
 /// </summary>
 public abstract class Log<TProvider>
     where TProvider : ITraceSourceProvider, new()
 {
     /// <summary>
-    ///   Throws <c>NotSupportedException</c>.
+    ///   Throws <see cref="NotSupportedException"/>.
     ///   The <see cref="Log{TProvider}"/> class provides static methods only.
     ///   Objects of this type cannot be created.
     /// </summary>
+    /// <exception cref="NotSupportedException">
+    ///   Always thrown.
+    /// </exception>
     protected Log()
     {
         throw new NotSupportedException
@@ -46,8 +49,8 @@ public abstract class Log<TProvider>
         = new TProvider().GetTraceSource();
 
     /// <summary>
-    ///   Gets the <c>System.Diagnostics.TraceSource</c> instance to which
-    ///   the static methods of this class foward invocations.
+    ///   Gets the <see cref="System.Diagnostics.TraceSource"/> instance to
+    ///   which the static methods of this class foward invocations.
     /// </summary>
     public static TraceSource TraceSource
         => _trace;
@@ -89,10 +92,10 @@ public abstract class Log<TProvider>
     /// </summary>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -106,10 +109,10 @@ public abstract class Log<TProvider>
     /// <param name="id">A numeric identifier for the entry.</param>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -159,10 +162,10 @@ public abstract class Log<TProvider>
     /// </summary>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -176,10 +179,10 @@ public abstract class Log<TProvider>
     /// <param name="id">A numeric identifier for the entry.</param>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -229,10 +232,10 @@ public abstract class Log<TProvider>
     /// </summary>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -246,10 +249,10 @@ public abstract class Log<TProvider>
     /// <param name="id">A numeric identifier for the entry.</param>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -299,10 +302,10 @@ public abstract class Log<TProvider>
     /// </summary>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -316,10 +319,10 @@ public abstract class Log<TProvider>
     /// <param name="id">A numeric identifier for the entry.</param>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -369,10 +372,10 @@ public abstract class Log<TProvider>
     /// </summary>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -386,10 +389,10 @@ public abstract class Log<TProvider>
     /// <param name="id">A numeric identifier for the entry.</param>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -439,10 +442,10 @@ public abstract class Log<TProvider>
     /// </summary>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -456,10 +459,10 @@ public abstract class Log<TProvider>
     /// <param name="id">A numeric identifier for the entry.</param>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -509,10 +512,10 @@ public abstract class Log<TProvider>
     /// </summary>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -526,10 +529,10 @@ public abstract class Log<TProvider>
     /// <param name="id">A numeric identifier for the entry.</param>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -579,10 +582,10 @@ public abstract class Log<TProvider>
     /// </summary>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -596,10 +599,10 @@ public abstract class Log<TProvider>
     /// <param name="id">A numeric identifier for the entry.</param>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -649,10 +652,10 @@ public abstract class Log<TProvider>
     /// </summary>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -666,10 +669,10 @@ public abstract class Log<TProvider>
     /// <param name="id">A numeric identifier for the entry.</param>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -718,8 +721,8 @@ public abstract class Log<TProvider>
     /// </summary>
     /// <param name="name">The name of the operation.</param>
     /// <returns>
-    ///   An <c>TraceOperation</c> representing the logical operation.
-    ///   When disposed, the <c>TraceOperation</c> writes stop and error entries to the log.
+    ///   A <see cref="TraceOperation"/> representing the logical operation.
+    ///   When disposed, the object writes stop and error entries to the log.
     /// </returns>
     public static TraceOperation Operation([CallerMemberName] string name = null)
     {
@@ -732,7 +735,7 @@ public abstract class Log<TProvider>
     /// <param name="name">The name of the operation.</param>
     /// <param name="action">The operation.</param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="action"/> is <c>null</c>.
+    ///   <paramref name="action"/> is <see langword="null"/>.
     /// </exception>
     [DebuggerStepThrough]
     public static void Do(string name, Action action)
@@ -746,7 +749,7 @@ public abstract class Log<TProvider>
     /// <param name="name">The name of the operation.</param>
     /// <param name="action">The operation.</param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="action"/> is <c>null</c>.
+    ///   <paramref name="action"/> is <see langword="null"/>.
     /// </exception>
     [DebuggerStepThrough]
     public static Task DoAsync(string name, Func<Task> action)
@@ -763,7 +766,7 @@ public abstract class Log<TProvider>
     ///   The value returned by <paramref name="action"/>.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="action"/> is <c>null</c>.
+    ///   <paramref name="action"/> is <see langword="null"/>.
     /// </exception>
     [DebuggerStepThrough]
     public static T Do<T>(string name, Func<T> action)
@@ -780,7 +783,7 @@ public abstract class Log<TProvider>
     ///   The value returned by <paramref name="action"/>.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="action"/> is <c>null</c>.
+    ///   <paramref name="action"/> is <see langword="null"/>.
     /// </exception>
     [DebuggerStepThrough]
     public static Task<T> DoAsync<T>(string name, Func<Task<T>> action)
@@ -789,39 +792,53 @@ public abstract class Log<TProvider>
     }
 
     /// <summary>
-    ///   Writes an entry to the log, reporting a new identifier for the current logical activity.
+    ///   Writes an entry to the log, reporting a new identifier for the
+    ///   current logical activity.
     /// </summary>
     /// <param name="message">A message for the entry.</param>
     /// <param name="newActivityId">A new identifier for the current logical activity.</param>
     /// <remarks>
-    ///   <c>Transfer</c> is intended to be used with the logical activities of a
-    ///   <c>CorrelationManager</c>. The <paramref name="newActivityId"/> parameter
-    ///   relates to the <c>ActivityId</c> property of a <c>CorrelationManager</c> object.
-    ///   If a logical operation begins in one activity and transfers to another,
-    ///   the second activity should log the transfer by calling the <c>Transfer</c> method.
-    ///   The <c>Transfer</c> call relates the new activity identifier to the previous one.
-    ///   The most likely consumer of this functionality is a trace viewer that can report
-    ///   logical operations that span multiple activities.
+    ///   <para>
+    ///     This method is intended for use with the logical activities of a
+    ///     <see cref="CorrelationManager"/>.
+    ///     The <paramref name="relatedActivityId"/> parameter relates to the
+    ///     <see cref="CorrelationManager.ActivityId"/> property.
+    ///   </para>
+    ///   <para>
+    ///     If a logical operation begins in one activity and transfers to
+    ///     another, the second activity should log the transfer by calling
+    ///     this method.  The call relates the new activity identifier to the
+    ///     previous identifier.  An example consumer of this functionality is
+    ///     a trace viewer that can report logical operations spanning multiple
+    ///     activities.
+    ///   </para>
     /// </remarks>
     [Conditional("TRACE")]
     public static void Transfer(string message, Guid newActivityId)
         => _trace.TraceTransfer(message, newActivityId);
 
     /// <summary>
-    ///   Writes an entry to the log, reporting a new identifier for the current logical activity.
+    ///   Writes an entry to the log, reporting a new identifier for the
+    ///   current logical activity.
     /// </summary>
     /// <param name="id">A numeric identifier for the entry.</param>
     /// <param name="message">A message for the entry.</param>
     /// <param name="newActivityId">A new identifier for the current logical activity.</param>
     /// <remarks>
-    ///   <c>Transfer</c> is intended to be used with the logical activities of a
-    ///   <c>CorrelationManager</c>. The <paramref name="newActivityId"/> parameter
-    ///   relates to the <c>ActivityId</c> property of a <c>CorrelationManager</c> object.
-    ///   If a logical operation begins in one activity and transfers to another,
-    ///   the second activity should log the transfer by calling the <c>Transfer</c> method.
-    ///   The <c>Transfer</c> call relates the new activity identifier to the previous one.
-    ///   The most likely consumer of this functionality is a trace viewer that can report
-    ///   logical operations that span multiple activities.
+    ///   <para>
+    ///     This method is intended for use with the logical activities of a
+    ///     <see cref="CorrelationManager"/>.
+    ///     The <paramref name="relatedActivityId"/> parameter relates to the
+    ///     <see cref="CorrelationManager.ActivityId"/> property.
+    ///   </para>
+    ///   <para>
+    ///     If a logical operation begins in one activity and transfers to
+    ///     another, the second activity should log the transfer by calling
+    ///     this method.  The call relates the new activity identifier to the
+    ///     previous identifier.  An example consumer of this functionality is
+    ///     a trace viewer that can report logical operations spanning multiple
+    ///     activities.
+    ///   </para>
     /// </remarks>
     [Conditional("TRACE")]
     public static void Transfer(int id, string message, Guid newActivityId)
@@ -864,10 +881,10 @@ public abstract class Log<TProvider>
     /// <param name="eventType">The type of entry to write.</param>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -882,10 +899,10 @@ public abstract class Log<TProvider>
     /// <param name="id">A numeric identifier for the entry.</param>
     /// <param name="format">A format string to build a message for the entry.</param>
     /// <param name="args">The objects to substitute into the format string.</param>
-    /// <exception cref="T:System.ArgumentNullException">
-    ///   <paramref name="format"/> is null.
+    /// <exception cref="ArgumentNullException">
+    ///   <paramref name="format"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="T:System.FormatException">
+    /// <exception cref="FormatException">
     ///   <paramref name="format"/> is invalid or
     ///   specifies an argument position not present in <paramref name="args"/>.
     /// </exception>
@@ -947,10 +964,14 @@ public abstract class Log<TProvider>
         // NOTE: int instead of bool; Interlocked.CompareExchange does not support bool
 
     /// <summary>
-    ///   Enables or disables logging of ALL thrown exceptions — even caught exceptions.
-    ///   WARNING: This results in an extremely noisy log and degrades application performance.
-    ///   Setting this property is not a thread-safe operation.
+    ///   Enables or disables logging of <strong>ALL</strong> thrown exceptions
+    ///   — even caught exceptions.
     /// </summary>
+    /// <remarks>
+    ///   ⚠ <strong>WARNING:</strong> This results in an extremely noisy log
+    ///   and degrades application performance. Setting this property is not a
+    ///   thread-safe operation.
+    /// </remarks>
     public static bool LogAllThrownExceptions
     {
         get => _logAllThrownExceptions;
@@ -971,8 +992,8 @@ public abstract class Log<TProvider>
     }
 
     /// <summary>
-    ///   Enables or disables logging of application termination and automatic closing of
-    ///   attached listeners.
+    ///   Enables or disables logging of application termination and automatic
+    ///   closing of attached listeners.
     /// </summary>
     public static bool CloseOnExit
     {
@@ -1003,19 +1024,18 @@ public abstract class Log<TProvider>
 
     [SecurityCritical, HandleProcessCorruptedStateExceptions]
     // ^^ These attributes opt-in this handler to receive certain severe
-    //    exceptions that indicate the process state might be corrupt, such
-    //    as stack overflows and access violations.
+    //    exceptions that indicate the process state might be corrupt, such as
+    //    stack overflows and access violations.
     private static void AppDomain_FirstChanceException(object sender, FirstChanceExceptionEventArgs e)
     {
         // Raised when ANY exception is thrown, either by app code or by
         // framework code, and BEFORE any catch.  These are called
-        // 'first-chance' exceptions.  Some will be caught and handled, and
-        // as such are not necessarily problems the user needs to know
-        // about.  They are observed here for diagnostic purposes.
+        // 'first-chance' exceptions.  Some will be caught and handled, and as
+        // such are not necessarily problems the user needs to know about.
+        // They are observed here for diagnostic purposes.
 
         // This is critical code; make no assumptions.
-        var exception = e?.Exception;
-        if (exception == null)
+        if (e is not { Exception: { } exception })
             return;
 
         // Avoid reentrancy if this method causes its own exceptions.
@@ -1046,17 +1066,17 @@ public abstract class Log<TProvider>
 
     [SecurityCritical, HandleProcessCorruptedStateExceptions]
     // ^^ These attributes opt-in this handler to receive certain severe
-    //    exceptions that indicate the process state might be corrupt, such
-    //    as stack overflows and access violations.
+    //    exceptions that indicate the process state might be corrupt, such as
+    //    stack overflows and access violations.
     private static void AppDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
     {
         // Raised when neither app code nor any framework code handles an
         // exception, except for a few special cases which go unnoticed:
         //
-        // * ThreadAbortException when the thread's Abort method is invoked
-        // * AppDomainUnloadedException when the thread's application domain
+        // - ThreadAbortException when the thread's Abort method is invoked
+        // - AppDomainUnloadedException when the thread's application domain
         //     is being unloaded
-        // * CLR internal exceptions
+        // - CLR internal exceptions
 
         // This is critical code; make no assumptions.
         var exceptionObject = e?.ExceptionObject;

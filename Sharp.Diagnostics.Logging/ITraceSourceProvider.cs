@@ -17,19 +17,20 @@
 namespace Sharp.Diagnostics.Logging;
 
 /// <summary>
-///   Provides the <c>TraceSource</c> object used by <see cref="Log{TProvider}"/>.
+///   Provides the <see cref="TraceSource"/> object used by
+///   <see cref="Log{TProvider}"/>.
 /// </summary>
 public interface ITraceSourceProvider
 {
     /// <summary>
-    ///   Gets the <c>TraceSource</c> object for this provider.
+    ///   Gets the <see cref="TraceSource"/> object for this provider.
     /// </summary>
     /// <remarks>
-    ///   This method is invoked by <see cref="Log{TProvider}"/> only once
-    ///   for a particular <c>TProvider</c> type argument.
+    ///   This method is invoked by <see cref="Log{TProvider}"/> only once for
+    ///   a particular <c>TProvider</c> type argument.
     /// </remarks>
     /// <returns>
-    ///   A <c>TraceSource</c> object.
+    ///   A <see cref="TraceSource"/> object.
     /// </returns>
     TraceSource GetTraceSource();
 }

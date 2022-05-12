@@ -17,13 +17,13 @@
 namespace Sharp.Diagnostics.Logging.Default;
 
 /// <summary>
-///   A ready-to-use <see cref="ITraceSourceProvider"/> that provides a
-///   <c>TraceSource</c> named 'Log'.
+///   Ready-to-use <see cref="ITraceSourceProvider"/> that provides a
+///   <see cref="TraceSource"/> named <c>Log</c>.
 /// </summary>
 public class DefaultTraceSourceProvider : ITraceSourceProvider
 {
     /// <summary>
-    ///   The name of the <c>TraceSource</c> returned by
+    ///   The name of the <see cref="TraceSource"/> returned by
     ///   <see cref="GetTraceSource"/>.
     /// </summary>
     public const string TraceSourceName = "Log";
