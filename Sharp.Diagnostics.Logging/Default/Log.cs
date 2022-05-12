@@ -1,4 +1,4 @@
-﻿/*
+/*
     Copyright 2022 Jeffrey Sharp
 
     Permission to use, copy, modify, and distribute this software for any
@@ -14,10 +14,9 @@
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-namespace Sharp.Diagnostics.Logging.Default
-{
-    /// <summary>
-    ///   Ready-to-use logging API.  Writes to a <c>TraceSource</c> named 'Log'.
-    /// </summary>
-    public abstract class Log : Log<DefaultTraceSourceProvider> { }
-}
+namespace Sharp.Diagnostics.Logging.Default;
+
+/// <summary>
+///   Ready-to-use logging API.  Writes to a <c>TraceSource</c> named 'Log'.
+/// </summary>
+public abstract class Log : Log<DefaultTraceSourceProvider> { }

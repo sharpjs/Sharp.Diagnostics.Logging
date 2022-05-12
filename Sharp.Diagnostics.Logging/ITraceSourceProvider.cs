@@ -1,4 +1,4 @@
-﻿/*
+/*
     Copyright 2022 Jeffrey Sharp
 
     Permission to use, copy, modify, and distribute this software for any
@@ -14,25 +14,22 @@
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-using System.Diagnostics;
+namespace Sharp.Diagnostics.Logging;
 
-namespace Sharp.Diagnostics.Logging
+/// <summary>
+///   Provides the <c>TraceSource</c> object used by <see cref="Log{TProvider}"/>.
+/// </summary>
+public interface ITraceSourceProvider
 {
     /// <summary>
-    ///   Provides the <c>TraceSource</c> object used by <see cref="Log{TProvider}"/>.
+    ///   Gets the <c>TraceSource</c> object for this provider.
     /// </summary>
-    public interface ITraceSourceProvider
-    {
-        /// <summary>
-        ///   Gets the <c>TraceSource</c> object for this provider.
-        /// </summary>
-        /// <remarks>
-        ///   This method is invoked by <see cref="Log{TProvider}"/> only once
-        ///   for a particular <c>TProvider</c> type argument.
-        /// </remarks>
-        /// <returns>
-        ///   A <c>TraceSource</c> object.
-        /// </returns>
-        TraceSource GetTraceSource();
-    }
+    /// <remarks>
+    ///   This method is invoked by <see cref="Log{TProvider}"/> only once
+    ///   for a particular <c>TProvider</c> type argument.
+    /// </remarks>
+    /// <returns>
+    ///   A <c>TraceSource</c> object.
+    /// </returns>
+    TraceSource GetTraceSource();
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
     Copyright 2022 Jeffrey Sharp
 
     Permission to use, copy, modify, and distribute this software for any
@@ -14,23 +14,20 @@
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-using System.Diagnostics;
+namespace Sharp.Diagnostics.Logging.Default;
 
-namespace Sharp.Diagnostics.Logging.Default
+/// <summary>
+///   A ready-to-use <see cref="ITraceSourceProvider"/> that provides a
+///   <c>TraceSource</c> named 'Log'.
+/// </summary>
+public class DefaultTraceSourceProvider : ITraceSourceProvider
 {
     /// <summary>
-    ///   A ready-to-use <see cref="ITraceSourceProvider"/> that provides a
-    ///   <c>TraceSource</c> named 'Log'.
+    ///   The name of the <c>TraceSource</c> returned by
+    ///   <see cref="GetTraceSource"/>.
     /// </summary>
-    public class DefaultTraceSourceProvider : ITraceSourceProvider
-    {
-        /// <summary>
-        ///   The name of the <c>TraceSource</c> returned by
-        ///   <see cref="GetTraceSource"/>.
-        /// </summary>
-        public const string TraceSourceName = "Log";
+    public const string TraceSourceName = "Log";
 
-        /// <inheritdoc/>
-        public TraceSource GetTraceSource() => new TraceSource(TraceSourceName);
-    }
+    /// <inheritdoc/>
+    public TraceSource GetTraceSource() => new(TraceSourceName);
 }
