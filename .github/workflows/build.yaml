@@ -63,6 +63,7 @@ jobs:
         run: >
           dotnet build .root.targets -c Release
           -p:StampOnBuild=true
+          -p:SetGitHubActionsVersion=true
           -p:Branch=${{ github.ref }}
           -p:Counter=${{ github.run_number }}
           -p:RepositoryCommit=${{ github.sha }}
@@ -73,6 +74,7 @@ jobs:
       - name: Build
         run: >
           dotnet build --no-restore -c Release
+          -p:TreatWarningsAsErrors=true
           -p:PackageOutputPath=${{ runner.temp }}\dist
 
       - name: Test
@@ -82,12 +84,12 @@ jobs:
           --results-directory:${{ runner.temp }}\coverage\raw
 
       - name: Prepare Coverage Report
-        uses: danielpalme/ReportGenerator-GitHub-Action@5.0.2
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.1.6
         #url: https://github.com/danielpalme/ReportGenerator-GitHub-Action
         with:
           reports: ${{ runner.temp }}\coverage\raw\**\coverage.opencover.xml
           targetdir: ${{ runner.temp }}\coverage
-          reporttypes: Cobertura;HtmlInline;Badges;TeamCitySummary
+          reporttypes: Cobertura;JsonSummary;Html_Dark;Badges
           verbosity: Warning
 
       - name: Save Coverage Report

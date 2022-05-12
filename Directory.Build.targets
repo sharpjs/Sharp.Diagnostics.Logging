@@ -31,13 +31,12 @@
 
   <!-- Visibility -->
   <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-      <_Parameter1>Sharp.Diagnostics.Logging.Tests</_Parameter1>
-    </AssemblyAttribute>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-      <!-- Required for Moq to mock a class with an internal abstract method. -->
-      <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
-    </AssemblyAttribute>
+    <InternalsVisibleTo Include="Sharp.Diagnostics.Logging.Tests"/>
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
+    <!-- Required for Moq to mock a class with an internal abstract method. -->
+  </ItemGroup>
+  <ItemGroup>
+    <Using Remove="System.Net.Http" />
   </ItemGroup>
 
   <!-- Versioning -->

@@ -20,7 +20,6 @@
     <Description>Tests for Sharp.Diagnostics.Logging</Description>
     <TargetFrameworks>net48;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>Sharp.Diagnostics.Logging</RootNamespace>
-    <NoWarn>$(NoWarn);IDE1006</NoWarn> <!-- Async suffix not desired for test project -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +28,12 @@
 
   <ItemGroup>
     <PackageReference Include="Subatomix.Testing" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="FluentAssertions" />
+    <Using Include="Moq" />
+    <Using Include="NUnit.Framework" />
   </ItemGroup>
 
 </Project>

@@ -41,9 +41,14 @@
 
   <!-- Build properties -->
   <PropertyGroup>
-    <LangVersion>10.0</LangVersion>
-    <!--<Nullable>enable</Nullable>-->
+    <LangVersion>10</LangVersion>
+    <ImplicitUsings>true</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
+  <ItemGroup>
+    <Using Include="System.Diagnostics" />
+    <Using Include="System.FormattableString" Static="true" />
+  </ItemGroup>
 
   <!-- Packaging properties -->
   <PropertyGroup>
