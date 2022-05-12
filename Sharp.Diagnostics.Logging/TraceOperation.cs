@@ -14,8 +14,6 @@
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-#nullable enable
-
 using System.Runtime.CompilerServices;
 
 namespace Sharp.Diagnostics.Logging;

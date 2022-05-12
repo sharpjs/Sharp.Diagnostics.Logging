@@ -724,7 +724,7 @@ public abstract class Log<TProvider>
     ///   A <see cref="TraceOperation"/> representing the logical operation.
     ///   When disposed, the object writes stop and error entries to the log.
     /// </returns>
-    public static TraceOperation Operation([CallerMemberName] string name = null)
+    public static TraceOperation Operation([CallerMemberName] string? name = null)
     {
         return new TraceOperation(_trace, name);
     }
@@ -1079,8 +1079,7 @@ public abstract class Log<TProvider>
         // - CLR internal exceptions
 
         // This is critical code; make no assumptions.
-        var exceptionObject = e?.ExceptionObject;
-        if (exceptionObject == null)
+        if (e is not { ExceptionObject: { } exceptionObject })
             return;
 
         try

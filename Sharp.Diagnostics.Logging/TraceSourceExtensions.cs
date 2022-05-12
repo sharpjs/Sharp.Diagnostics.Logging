@@ -804,7 +804,7 @@ public static class TraceSourceExtensions
     ///   When disposed, the object writes stop and error entries to the the
     ///   trace listeners in the <see cref="TraceSource.Listeners"/> collection.
     /// </returns>
-    public static TraceOperation Operation(this TraceSource trace, [CallerMemberName] string name = null)
+    public static TraceOperation Operation(this TraceSource trace, [CallerMemberName] string? name = null)
     {
         return new TraceOperation(trace, name);
     }

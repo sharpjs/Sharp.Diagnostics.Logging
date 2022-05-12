@@ -251,7 +251,7 @@ public class PrettyTextWriterTraceListener : TextWriterTraceListener
     }
 
     private bool ShouldTrace(TraceEventCache e, string source, TraceEventType type, int id,
-        string message = null, object[] args = null, object obj = null, object[] objs = null)
+        string? message = null, object[]? args = null, object? obj = null, object[]? objs = null)
     {
         var filter = Filter;
         return filter == null
@@ -261,10 +261,10 @@ public class PrettyTextWriterTraceListener : TextWriterTraceListener
 #if !NETFRAMEWORK
     // Workaround for .NET Core bug https://github.com/dotnet/corefx/issues/28747
 
-    private static TextWriter CreateWriter(string path, IShim shim)
+    private static TextWriter CreateWriter(string? path, IShim shim)
     {
         path = GetFullPath(path, shim);
-        if (path == null)
+        if (path is null)
             // Disable the listener
             return TextWriter.Null;
 
@@ -303,12 +303,12 @@ public class PrettyTextWriterTraceListener : TextWriterTraceListener
     }
 #endif
 
-    private static string GetFullPath(string fileName, IShim shim)
+    private static string? GetFullPath(string? fileName, IShim shim)
     {
         // Choose a reasonable default file name
         var path = string.IsNullOrEmpty(fileName)
             ? DefaultLogFileName
-            : fileName;
+            : fileName!;
 
         try
         {
