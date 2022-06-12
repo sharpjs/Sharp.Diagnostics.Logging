@@ -31,8 +31,8 @@
 
   <!-- Visibility -->
   <ItemGroup>
-    <InternalsVisibleTo Include="Sharp.Diagnostics.Logging.Tests"/>
-    <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
+    <InternalsVisibleTo Include="Sharp.Diagnostics.Logging.Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
     <!-- Required for Moq to mock a class with an internal abstract method. -->
   </ItemGroup>
   <ItemGroup>
