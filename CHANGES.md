@@ -9,6 +9,8 @@ Most lines should begin with one of these words:
 -->
 
 ## [1.0.1](https://github.com/sharpjs/Sharp.Diagnostics.Logging/compare/v1.0.0...release/1.0.1)
+- Fix packaging issues:
+  - Enable deterministic build.
 
 ## [1.0.0](https://github.com/sharpjs/Sharp.Diagnostics.Logging/compare/v0.1.0...release/1.0.0)
 - Update build targets to .NET Framework 4.6.1 (was 4.5) and .NET Standard 2.0
