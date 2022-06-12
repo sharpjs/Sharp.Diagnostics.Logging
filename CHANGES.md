@@ -5,8 +5,10 @@ Most lines should begin with one of these words:
 *Add*, *Fix*, *Update*, *Change*, *Deprecate*, *Remove*.
 
 <!--
-## [Unreleased](https://github.com/sharpjs/Sharp.Diagnostics.Logging/compare/v0.0.0...HEAD)
+## [Unreleased](https://github.com/sharpjs/Sharp.Diagnostics.Logging/compare/v1.0.1...HEAD)
 -->
+
+## [1.0.1](https://github.com/sharpjs/Sharp.Diagnostics.Logging/compare/v1.0.0...release/1.0.1)
 
 ## [1.0.0](https://github.com/sharpjs/Sharp.Diagnostics.Logging/compare/v0.1.0...release/1.0.0)
 - Update build targets to .NET Framework 4.6.1 (was 4.5) and .NET Standard 2.0
