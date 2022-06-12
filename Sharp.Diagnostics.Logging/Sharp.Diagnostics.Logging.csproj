@@ -18,7 +18,7 @@
 
   <PropertyGroup>
     <Description>Micro-framework for logging with the .NET TraceSource API</Description>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
